@@ -1,0 +1,13 @@
+from base import *
+
+
+DEBUG = True
+
+SF_USERNAME = 'YOUR@EMAIL.COM'
+SF_PASSWORD = 'YOUR_PASSWORD'
+SF_TOKEN = 'YOUR_SALESFORCE_TOKEN'
+SF_SANDBOX = True
+
+NB_NATION_SLUG = 'mozillafoundation'
+
+NB_API_KEY = 'NB_API_KEY'
