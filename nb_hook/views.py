@@ -9,6 +9,10 @@ def hook(request):
     if request.method == "POST":
         content = request.body
         content = json.loads(content)
+
+        test_obj = models.TestHook(content=content)
+        test_obj.save()
+
         person = content['payload']['person']
         contact_obj = {
             'FirstName': person['first_name'],
