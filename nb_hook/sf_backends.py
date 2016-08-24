@@ -55,7 +55,7 @@ def upsert_contact_to_campaign(object):
     except:
         object_id = None
 
-    if object_id:
+    if object_id is not None:
         object = {
             'Campaign_Language__c': object['Campaign_Language__c']
         }
