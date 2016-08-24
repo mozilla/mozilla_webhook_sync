@@ -54,7 +54,8 @@ def hook(request):
             else:
                 ### add campaign obj to SalesForce
                 sf_campaign_id = sf_backends.insert_campaign({
-                    'Name': campaign
+                    'Name': campaign,
+                    'Type': 'Petition'
                 })
 
                 ### save it in DJ NB -> SF model
