@@ -26,6 +26,7 @@ def hook(request):
             'MailingCountryCode': person['primary_address']['country_code'],
             'Subscriber__c': person['email_opt_in'],
             'Sub_Mozilla_Foundation__c': person['email_opt_in'],
+            'RecordTypeId': '012210000008cFvAAI',
         }
 
         if person['salesforce_id']:
