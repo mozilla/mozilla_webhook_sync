@@ -61,7 +61,7 @@ def upsert_contact_to_campaign(object):
         }
         return sf.CampaignMember.update(object_id, object)
     else:
-        return sf.CampaignMember.insert(object)
+        return sf.CampaignMember.create(object)
 
 
 def fetch_campaign_member(object_id):
