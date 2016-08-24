@@ -12,12 +12,12 @@ def hook(request):
         person = content['payload']['person']
 
         ### for testing and temporarily saving data to db
-        test_obj = models.TestHook(content=person['language'])
+        test_obj = models.TestHook(content=person['user_language'])
         test_obj.save()
 
         ### set default language if none is selected
-        if person['language'] is None:
-            person['language'] = 'EN'
+        if person['user_language'] is None:
+            person['user_language'] = 'EN'
 
         contact_obj = {
             'FirstName': person['first_name'],
@@ -48,7 +48,7 @@ def hook(request):
                 sf_backends.upsert_contact_to_campaign({
                     'ContactId': sf_contact_id['id'],
                     'CampaignId': dj_sf_campaign_id,
-                    'Campaign_Language__c': person['language'],
+                    'Campaign_Language__c': person['user_language'],
                     'Campaign_Email_Opt_In__c': person['email_opt_in'],
                 })
             else:
@@ -67,9 +67,9 @@ def hook(request):
 
                 ### add CampaignMember Obj
                 sf_backends.upsert_contact_to_campaign({
-                    'ContactId': sf_contact_id['id'],
+                    'ContactId': sf_contact_id,
                     'CampaignId': sf_campaign_id['id'],
-                    'Campaign_Language__c': person['language'],
+                    'Campaign_Language__c': person['user_language'],
                     'Campaign_Email_Opt_In__c': person['email_opt_in'],
                 })
 
