@@ -2,6 +2,7 @@ from django.http import HttpResponse, Http404
 from . import sf_backends, nb_backends, models
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.conf import settings
 
 
 @csrf_exempt
@@ -11,9 +12,9 @@ def hook(request):
         content = json.loads(content)
         person = content['payload']['person']
 
-        ### for testing and temporarily saving data to db
-        test_obj = models.TestHook(content=request.body)
-        test_obj.save()
+        ### for testing ONLY and temporarily saving data to db
+        # test_obj = models.TestHook(content=request.body)
+        # test_obj.save()
 
         ### set default language if none is selected
         if person['user_language'] is None:
@@ -27,7 +28,7 @@ def hook(request):
             'Subscriber__c': person['email_opt_in'],
             'Sub_Mozilla_Foundation__c': person['email_opt_in'],
             'Email_Language__c': person['user_language'],
-            'RecordTypeId': '012210000008cFvAAI',  # advocacy record type
+            'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID  # advocacy record type
         }
 
         if person['salesforce_id']:
