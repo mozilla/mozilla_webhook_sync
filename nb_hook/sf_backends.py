@@ -44,6 +44,26 @@ def insert_campaign(object):
     return sf.Campaign.create(object)
 
 
-def insert_contact_to_campaign(object):
+def upsert_contact_to_campaign(object):
     sf = get_sf_session()
-    return sf.CampaignMember.create(object)
+
+    # search for existing user
+    query = "select id from CampaignMember where ContactId = '{0}'".format(object['ContactId'])
+    results = sf.query_all(query)
+    try:
+        object_id = results['records'][0]['Id']
+    except:
+        object_id = None
+
+    if object_id:
+        object = {
+            'Campaign_Language__c': object['Campaign_Language__c']
+        }
+        return sf.CampaignMember.update(object_id, object)
+    else:
+        return sf.CampaignMember.insert(object)
+
+
+def fetch_campaign_member(object_id):
+    sf = get_sf_session()
+    return sf.CampaignMember.get(object_id)
