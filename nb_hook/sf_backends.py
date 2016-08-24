@@ -60,7 +60,8 @@ def upsert_contact_to_campaign(object):
     sf = get_sf_session()
 
     # search for existing user
-    query = "select id from CampaignMember where ContactId = '{0}'".format(object['ContactId'])
+    query = "select id from CampaignMember where ContactId = '{0}' " \
+            "and CampaignId = '{1}'".format(object['ContactId'], object['CampaignId'])
     results = sf.query_all(query)
     try:
         object_id = results['records'][0]['Id']
