@@ -1,6 +1,4 @@
-from rauth import OAuth2Service
 from django.conf import settings
-import json
 import requests
 
 
