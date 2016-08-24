@@ -23,9 +23,9 @@ def insert_user(object):
     return sf.Contact.create(object)
 
 
-def upsert_user(object_id, object):
+def update_user(object_id, object):
     sf = get_sf_session()
-    return sf.Contact.upsert(object_id, object)
+    return sf.Contact.update(object_id, object)
 
 
 def fetch_campaign(object_id):

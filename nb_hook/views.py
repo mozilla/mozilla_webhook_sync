@@ -21,7 +21,7 @@ def hook(request):
             person['language'] = 'EN'
 
         if person['salesforce_id']:
-            sf_backends.upsert_user(person['salesforce_id'], contact_obj)
+            sf_backends.update_user(person['salesforce_id'], contact_obj)
         else:
             sf_contact_id = sf_backends.insert_user(contact_obj)
             nb_backends.nb_update_salesforce_id(person['id'], sf_contact_id['id'])
