@@ -30,7 +30,6 @@ def hook(request):
         else:
             sf_contact_id = sf_backends.insert_user(contact_obj)
             nb_backends.nb_update_salesforce_id(person['id'], sf_contact_id['id'])
-            return HttpResponse('user saved')
 
         for campaign in person['tags']:
             try:

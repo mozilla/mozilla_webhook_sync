@@ -20,7 +20,19 @@ def fetch_user(object_id):
 
 def insert_user(object):
     sf = get_sf_session()
-    return sf.Contact.create(object)
+
+    # search for existing user
+    query = "select Id from Contact where Email = '{0}'".format(object['Email'])
+    results = sf.query_all(query)
+    try:
+        object_id = results['records'][0]['Id']
+    except:
+        object_id = None
+
+    if object_id is not None:
+        return sf.Contact.update(object_id, object)
+    else:
+        return sf.Contact.create(object)
 
 
 def update_user(object_id, object):
