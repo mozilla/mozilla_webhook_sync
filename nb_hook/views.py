@@ -69,7 +69,7 @@ def hook(request):
                 ### add CampaignMember Obj
                 sf_backends.upsert_contact_to_campaign({
                     'ContactId': sf_contact_id['id'],
-                    'CampaignId': sf_campaign_id,
+                    'CampaignId': sf_campaign_id['id'],
                     'Campaign_Language__c': person['user_language'],
                     'Campaign_Email_Opt_In__c': person['email_opt_in'],
                 })
