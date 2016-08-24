@@ -12,7 +12,7 @@ def hook(request):
         person = content['payload']['person']
 
         ### for testing and temporarily saving data to db
-        test_obj = models.TestHook(content=person['user_language'])
+        test_obj = models.TestHook(content=request.body)
         test_obj.save()
 
         ### set default language if none is selected
