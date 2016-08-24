@@ -11,18 +11,22 @@ def hook(request):
         content = json.loads(content)
         person = content['payload']['person']
 
-        test_obj = models.TestHook(content=person['salesforce_id'])
+        ### for testing and temporarily saving data to db
+        test_obj = models.TestHook(content=person['language'])
         test_obj.save()
+
+        ### set default language if none is selected
+        if person['language'] is None:
+            person['language'] = 'EN'
 
         contact_obj = {
             'FirstName': person['first_name'],
             'LastName': person['last_name'],
             'Email': person['email'],
             'MailingCountryCode': person['primary_address']['country_code'],
+            'Subscriber__c': person['email_opt_in'],
+            'Sub_Mozilla_Foundation__c': person['email_opt_in'],
         }
-
-        if person['language'] is None:
-            person['language'] = 'EN'
 
         if person['salesforce_id']:
             sf_backends.update_user(person['salesforce_id'], contact_obj)
@@ -39,30 +43,32 @@ def hook(request):
             if campaign_tag:
                 dj_sf_campaign_id = campaign_tag.salesforce_id
 
-                # add CampaignMember Obj
+                ### add CampaignMember Obj
                 sf_backends.upsert_contact_to_campaign({
                     'ContactId': sf_contact_id['id'],
                     'CampaignId': dj_sf_campaign_id,
                     'Campaign_Language__c': person['language'],
+                    'Campaign_Email_Opt_In__c': person['email_opt_in'],
                 })
             else:
-                # add campaign obj to SalesForce
+                ### add campaign obj to SalesForce
                 sf_campaign_id = sf_backends.insert_campaign({
                     'Name': campaign
                 })
 
-                # save it in DJ NB -> SF model
+                ### save it in DJ NB -> SF model
                 dj_campaign_obj = models.Campaign(
                     nationbuilder_tag=campaign,
                     salesforce_id=sf_campaign_id['id'],
                 )
                 dj_campaign_obj.save()
 
-                # add CampaignMember Obj
+                ### add CampaignMember Obj
                 sf_backends.upsert_contact_to_campaign({
                     'ContactId': sf_contact_id['id'],
                     'CampaignId': sf_campaign_id['id'],
                     'Campaign_Language__c': person['language'],
+                    'Campaign_Email_Opt_In__c': person['email_opt_in'],
                 })
 
         return HttpResponse('saved')
