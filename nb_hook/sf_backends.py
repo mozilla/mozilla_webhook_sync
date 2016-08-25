@@ -30,7 +30,8 @@ def insert_user(object):
         object_id = None
 
     if object_id is not None:
-        return sf.Contact.update(object_id, object)
+        sf.Contact.update(object_id, object)
+        return {'id': object_id}
     else:
         return sf.Contact.create(object)
 

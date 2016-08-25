@@ -30,7 +30,6 @@ def hook(request):
             'Email_Language__c': person['user_language'],
             'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID  # advocacy record type
         }
-
         if person['salesforce_id']:
             sf_backends.update_user(person['salesforce_id'], contact_obj)
             sf_contact_id = {'id': person['salesforce_id']}
