@@ -35,7 +35,7 @@ def hook(request):
             sf_contact_id = {'id': person['salesforce_id']}
         else:
             sf_contact_id = sf_backends.insert_user(contact_obj)
-            # nb_backends.nb_update_salesforce_id(person['id'], sf_contact_id['id'])
+            nb_backends.nb_update_salesforce_id(person['id'], sf_contact_id['id'])
 
         for campaign in person['tags']:
             try:
