@@ -10,6 +10,13 @@ def hook(request):
     if request.method == "POST":
         content = request.body
         content = json.loads(content)
+
+        ### check NB token
+        if 'token' not in content:
+            raise Http404("Not found")
+        if content['token'] != settings.NB_TOKEN:
+            raise Http404("Not found")
+
         person = content['payload']['person']
 
         ### for testing ONLY and temporarily saving data to db
@@ -35,7 +42,7 @@ def hook(request):
             sf_contact_id = {'id': person['salesforce_id']}
         else:
             sf_contact_id = sf_backends.insert_user(contact_obj)
-            nb_backends.nb_update_salesforce_id(person['id'], sf_contact_id['id'])
+            # nb_backends.nb_update_salesforce_id(person['id'], sf_contact_id['id'])  #disable to prevent record duplication
 
         for campaign in person['tags']:
             try:
