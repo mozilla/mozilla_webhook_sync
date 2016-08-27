@@ -36,10 +36,10 @@ def insert_user(object):
     else:
         time.sleep( 5 )
         results = sf.query_all(query)
-           try:
-               object_id = results['records'][0]['Id']
-           except:
-               object_id = None
+        try:
+           object_id = results['records'][0]['Id']
+        except:
+           object_id = None
         if object_id is not None:
             sf.Contact.update(object_id, object)
             return {'id': object_id}
