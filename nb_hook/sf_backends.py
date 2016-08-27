@@ -35,9 +35,10 @@ def insert_user(object):
         return {'id': object_id}
     else:
         time.sleep( 5 )
-        results = sf.query_all(query)
+        query_b = "select Id from Contact where Email = '{0}'".format(object['Email'])
+        results_b = sf.query_all(query_b)
         try:
-           object_id = results['records'][0]['Id']
+           object_id = results_b['records'][0]['Id']
         except:
            object_id = None
         if object_id is not None:
