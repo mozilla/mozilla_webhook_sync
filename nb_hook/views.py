@@ -89,7 +89,7 @@ def hook(request):
 @csrf_exempt
 def update(request):
     if request.method == "POST":
-        time.sleep(30)
+        time.sleep(10)
         return hook(request)
 
     raise Http404("Not found")
