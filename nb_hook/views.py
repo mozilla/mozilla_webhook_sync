@@ -101,7 +101,7 @@ def update(request):
         max_time = timezone.now() - timezone.timedelta(minutes=1) #the newest selected field must be at least 1 minutes old which is the time that salesforce need
         print timezone.now()
         print max_time
-        contacts = models.ContactSync.objects.filter(synced=False, created_at__lte = max_time)
+        contacts = models.ContactSync.objects.filter(synced=False, created_at__lte = max_time).order_by('-created_at')
     except models.ContactSync.DoesNotExist:
         contacts = None
     if contacts: 
@@ -109,7 +109,7 @@ def update(request):
             print contact_item.contact
             content = request.body
             content = json.loads(content)
-            #sent_to_sf =  send_to_sf(content)
+            sent_to_sf =  send_to_sf(content)
             #sent_to_sf = True #For debug without send to salesforce
             if sent_to_sf:
                 contact_item.synced = True
