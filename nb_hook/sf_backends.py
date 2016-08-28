@@ -34,7 +34,7 @@ def insert_user(object):
         sf.Contact.update(object_id, object)
         return {'id': object_id}
     else:
-        time.sleep( 5 )
+        time.sleep( 10 )
         query_b = "select Id from Contact where Email = '{0}'".format(object['Email'])
         results_b = sf.query_all(query_b)
         try:
