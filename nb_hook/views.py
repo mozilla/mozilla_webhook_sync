@@ -2,6 +2,7 @@ from django.http import HttpResponse, Http404
 from . import sf_backends, nb_backends, models
 from django.views.decorators.csrf import csrf_exempt
 import json
+import time
 from django.conf import settings
 
 
@@ -82,5 +83,13 @@ def hook(request):
                 })
 
         return HttpResponse('saved')
+
+    raise Http404("Not found")
+
+@csrf_exempt
+def update(request):
+    if request.method == "POST":
+        time.sleep(30)
+        return hook(request)
 
     raise Http404("Not found")

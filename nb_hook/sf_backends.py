@@ -1,6 +1,5 @@
 from simple_salesforce import Salesforce
 import requests
-import time
 from django.conf import settings
 
 
@@ -34,18 +33,7 @@ def insert_user(object):
         sf.Contact.update(object_id, object)
         return {'id': object_id}
     else:
-        time.sleep( 10 )
-        query_b = "select Id from Contact where Email = '{0}'".format(object['Email'])
-        results_b = sf.query_all(query_b)
-        try:
-           object_id = results_b['records'][0]['Id']
-        except:
-           object_id = None
-        if object_id is not None:
-            sf.Contact.update(object_id, object)
-            return {'id': object_id}
-        else:
-            return sf.Contact.create(object)
+        return sf.Contact.create(object)
 
 
 def update_user(object_id, object):
