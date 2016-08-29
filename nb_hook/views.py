@@ -107,7 +107,7 @@ def update(request):
     if contacts: 
         for contact_item in contacts:
             print contact_item.contact
-            content = request.body
+            content = contact_item.contact
             content = json.loads(content)
             sent_to_sf =  send_to_sf(content)
             #sent_to_sf = True #For debug without send to salesforce
