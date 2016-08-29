@@ -36,7 +36,7 @@ def send_to_sf(contact):
         sf_contact_id = sf_backends.insert_user(contact_obj)
         # nb_backends.nb_update_salesforce_id(person['id'], sf_contact_id['id'])  #disable to prevent record duplication
     
-    print sf_contact_id
+    #print sf_contact_id
     
     for campaign in person['tags']:
         try:
@@ -99,16 +99,17 @@ def hook(request):
 def update(request):
     try:
         max_time = timezone.now() - timezone.timedelta(minutes=1) #the newest selected field must be at least 1 minutes old which is the time that salesforce need
-        print timezone.now()
-        print max_time
+        #print timezone.now()
+        #print max_time
         contacts = models.ContactSync.objects.filter(synced=False, created_at__lte = max_time).order_by('-created_at')
     except models.ContactSync.DoesNotExist:
         contacts = None
     if contacts: 
         for contact_item in contacts:
-            print contact_item.contact
+            #print contact_item.contact
             content = contact_item.contact
             content = json.loads(content)
+            #print content
             sent_to_sf =  send_to_sf(content)
             #sent_to_sf = True #For debug without send to salesforce
             if sent_to_sf:
