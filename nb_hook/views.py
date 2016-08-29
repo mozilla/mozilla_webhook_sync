@@ -90,9 +90,23 @@ def hook(request):
             raise Http404("Not found")
         if content['token'] != settings.NB_TOKEN:
             raise Http404("Not found")
+        
+        try: 
+            matching_contacts = models.ContactSync.objects.filter(contact = request.body)
+        except models.ContactSync.DoesNotExist:
+            matching_contacts = None
+
+        if matching_contacts:
+            return HttpResponse('contact exist')
+        else:
+            db_contact = models.ContactSync(contact=request.body)
+            db_contact.save()
 
         saved =  send_to_sf(content)
+        #saved =  True #For testing
         if saved:
+            db_contact.synced = True
+            db_contact.save()
             return HttpResponse('saved')
         else:
             return HttpResponse('not saved')
@@ -135,8 +149,16 @@ def save_update(request):
         if content['token'] != settings.NB_TOKEN:
             raise Http404("Not found")
 
-        update_obj = models.ContactSync(contact=request.body)
-        update_obj.save()
-        return HttpResponse('saved')
+        try: 
+            matching_contacts = models.ContactSync.objects.filter(contact = request.body)
+        except models.ContactSync.DoesNotExist:
+            matching_contacts = None
+
+        if matching_contacts:
+            return HttpResponse('contact exist')
+        else:
+            update_obj = models.ContactSync(contact=request.body)
+            update_obj.save()
+            return HttpResponse('saved')
 
     raise Http404("Not found")
