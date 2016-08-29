@@ -18,6 +18,9 @@ def send_to_sf(contact):
     ### set default language if none is selected
     if person['user_language'] is None:
         person['user_language'] = 'EN'
+    
+    if person['primary_address']['country_code'] == 'other' :
+        person['primary_address']['country_code'] = ''
 
     contact_obj = {
         'FirstName': person['first_name'],
