@@ -32,7 +32,7 @@ def send_to_sf(contact):
         'Email_Language__c': person['user_language'],
         'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID  # advocacy record type
     }
-    if person['salesforce_id']:
+    if person['salesforce_id']:  # not used because we are not saving salesforce ID back
         sf_backends.update_user(person['salesforce_id'], contact_obj)
         sf_contact_id = {'id': person['salesforce_id']}
     else:
@@ -78,6 +78,7 @@ def send_to_sf(contact):
                 'Campaign_Email_Opt_In__c': person['email_opt_in'],
             })
     return True
+
 
 @csrf_exempt
 def hook(request):

@@ -10,7 +10,7 @@ class TestHook(models.Model):
 
 class ContactSync(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
-    email = models.EmailField()
+    email = models.EmailField(blank=True, null=True)
     contact = models.TextField(blank=True, null=True)
     synced = models.BooleanField(default=False)
 
