@@ -157,10 +157,10 @@ def save_update(request):
             matching_contacts = None
 
         if matching_contacts:
-            update_obj = models.ContactSync(email=content['payload']['person']['email'],
+            matching_contacts = models.ContactSync(email=content['payload']['person']['email'],
                                             contact=request.body,
                                             synced=False)
-            update_obj.save()
+            matching_contacts.save()
             return HttpResponse('contact exist')
         else:
             update_obj = models.ContactSync(email=content['payload']['person']['email'], contact=request.body)
