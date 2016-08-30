@@ -152,14 +152,11 @@ def save_update(request):
             raise Http404("Not found")
 
         try: 
-            matching_contacts = models.ContactSync.objects.filter(email=content['payload']['person']['email'])
+            matching_contacts = models.ContactSync.objects.filter(email=content['payload']['person']['email']).update(contact=request.body, synced=False)
         except models.ContactSync.DoesNotExist:
             matching_contacts = None
 
         if matching_contacts:
-            matching_contacts.contact = request.body
-            matching_contacts.synced = False
-            matching_contacts.save()
             return HttpResponse('contact exist')
         else:
             update_obj = models.ContactSync(email=content['payload']['person']['email'], contact=request.body)
