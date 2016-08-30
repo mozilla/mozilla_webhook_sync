@@ -19,7 +19,7 @@ def send_to_sf(contact):
     if person['user_language'] is None:
         person['user_language'] = 'EN'
     
-    if person['primary_address']['country_code'] == 'Other' :
+    if person['primary_address']['country_code'] == 'Other' or person['primary_address']['country_code'] == 'other':
         person['primary_address']['country_code'] = ''
 
     contact_obj = {
