@@ -92,17 +92,17 @@ def hook(request):
             raise Http404("Not found")
         
         try: 
-            matching_contacts = models.ContactSync.objects.filter(contact = request.body)
+            matching_contacts = models.ContactSync.objects.filter(email=content['payload']['person']['email'])
         except models.ContactSync.DoesNotExist:
             matching_contacts = None
 
         if matching_contacts:
             return HttpResponse('contact exist')
         else:
-            db_contact = models.ContactSync(contact=request.body)
+            db_contact = models.ContactSync(email=content['payload']['person']['email'], contact=content)
             db_contact.save()
 
-        saved =  send_to_sf(content)
+        saved = send_to_sf(content)
         #saved =  True #For testing
         if saved:
             db_contact.synced = True
@@ -112,13 +112,14 @@ def hook(request):
             return HttpResponse('not saved')
     raise Http404("Not found")
 
+
 @csrf_exempt
 def update(request):
     try:
         max_time = timezone.now() - timezone.timedelta(minutes=1) #the newest selected field must be at least 1 minutes old which is the time that salesforce need
         #print timezone.now()
         #print max_time
-        contacts = models.ContactSync.objects.filter(synced=False, created_at__lte = max_time).order_by('-created_at')
+        contacts = models.ContactSync.objects.filter(synced=False, created_at__lte=max_time).order_by('-created_at')
     except models.ContactSync.DoesNotExist:
         contacts = None
     if contacts: 
@@ -150,14 +151,14 @@ def save_update(request):
             raise Http404("Not found")
 
         try: 
-            matching_contacts = models.ContactSync.objects.filter(contact = request.body)
+            matching_contacts = models.ContactSync.objects.filter(email=content['payload']['person']['email'])
         except models.ContactSync.DoesNotExist:
             matching_contacts = None
 
         if matching_contacts:
             return HttpResponse('contact exist')
         else:
-            update_obj = models.ContactSync(contact=request.body)
+            update_obj = models.ContactSync(email=content['payload']['person']['email'], contact=content)
             update_obj.save()
             return HttpResponse('saved')
 

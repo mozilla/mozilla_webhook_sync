@@ -6,9 +6,11 @@ from django.db import models
 class TestHook(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     content = models.TextField(blank=True, null=True)
-    
+
+
 class ContactSync(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
+    email = models.EmailField()
     contact = models.TextField(blank=True, null=True)
     synced = models.BooleanField(default=False)
 
