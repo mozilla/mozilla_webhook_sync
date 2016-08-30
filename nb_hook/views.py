@@ -100,7 +100,7 @@ def hook(request):
         if matching_contacts:
             return HttpResponse('contact exist')
         else:
-            db_contact = models.ContactSync(email=content['payload']['person']['email'], contact=content)
+            db_contact = models.ContactSync(email=content['payload']['person']['email'], contact=request.body)
             db_contact.save()
 
         saved = send_to_sf(content)
@@ -159,7 +159,7 @@ def save_update(request):
         if matching_contacts:
             return HttpResponse('contact exist')
         else:
-            update_obj = models.ContactSync(email=content['payload']['person']['email'], contact=content)
+            update_obj = models.ContactSync(email=content['payload']['person']['email'], contact=request.body)
             update_obj.save()
             return HttpResponse('saved')
 
