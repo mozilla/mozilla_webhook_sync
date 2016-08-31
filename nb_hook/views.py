@@ -41,7 +41,10 @@ def send_to_sf(contact):
         sf_backends.update_user(person['salesforce_id'], contact_obj)
         sf_contact_id = {'id': person['salesforce_id']}
     else:
-        sf_contact_id = sf_backends.insert_user(contact_obj)
+        try:
+            sf_contact_id = sf_backends.insert_user(contact_obj)
+        except:
+            return
         # nb_backends.nb_update_salesforce_id(person['id'], sf_contact_id['id'])  #disable to prevent record duplication
     
     #print sf_contact_id
