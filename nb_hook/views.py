@@ -21,15 +21,17 @@ def send_to_sf(contact):
 
     try:
         if person['primary_address']['country_code'] == 'Other' or person['primary_address']['country_code'] == 'other':
-            person['primary_address']['country_code'] = ''
+            country_code = ''
+        else:
+            country_code = person['primary_address']['country_code']
     except:
-        person['primary_address']['country_code'] = ''
+        country_code = ''
 
     contact_obj = {
         'FirstName': person['first_name'],
         'LastName': person['last_name'],
         'Email': person['email'],
-        'MailingCountryCode': person['primary_address']['country_code'],
+        'MailingCountryCode': country_code,
         'Subscriber__c': person['email_opt_in'],
         'Sub_Mozilla_Foundation__c': person['email_opt_in'],
         'Email_Language__c': person['user_language'],
