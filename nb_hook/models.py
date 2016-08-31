@@ -13,6 +13,7 @@ class ContactSync(models.Model):
     email = models.EmailField(blank=True, null=True, unique=True)
     contact = models.TextField(blank=True, null=True)
     synced = models.BooleanField(default=False)
+    type = models.CharField(blank=True, null=True, max_length=15)
 
 
 class Campaign(models.Model):

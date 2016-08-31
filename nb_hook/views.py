@@ -105,7 +105,9 @@ def hook(request):
         if matching_contacts:
             return HttpResponse('contact exist')
         else:
-            db_contact = models.ContactSync(email=content['payload']['person']['email'], contact=request.body)
+            db_contact = models.ContactSync(email=content['payload']['person']['email'],
+                                            contact=request.body,
+                                            type='created')
             db_contact.save()
 
         saved = send_to_sf(content)
@@ -121,6 +123,10 @@ def hook(request):
 
 @csrf_exempt
 def update(request):
+    ### check if there is any duplicate entries due to NB
+    # try:
+        # contacts = models.ContactSync.objects
+
     try:
         max_time = timezone.now() - timezone.timedelta(minutes=1) #the newest selected field must be at least 1 minutes old which is the time that salesforce need
         #print timezone.now()
@@ -167,7 +173,9 @@ def save_update(request):
         if matching_contacts:
             return HttpResponse('contact exist')
         else:
-            update_obj = models.ContactSync(email=content['payload']['person']['email'], contact=request.body)
+            update_obj = models.ContactSync(email=content['payload']['person']['email'],
+                                            contact=request.body,
+                                            type='updated')
             update_obj.save()
             return HttpResponse('saved')
 
