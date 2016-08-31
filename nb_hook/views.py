@@ -91,6 +91,14 @@ def hook(request):
         content = request.body
         content = json.loads(content)
 
+        ### save all data to a log table
+        log_contact = models.Log(
+            email=content['payload']['person']['email'],
+            contact=request.body,
+            type='created',
+        )
+        log_contact.save()
+
         ### add this to prevent NB sending duplicated user_created with user_language as null
         if not content['payload']['person']['user_language']:
             return HttpResponse('not saved, no user_language')
@@ -162,6 +170,14 @@ def save_update(request):
     if request.method == "POST":
         content = request.body
         content = json.loads(content)
+
+        ### save all data to a log table
+        log_contact = models.Log(
+            email=content['payload']['person']['email'],
+            contact=request.body,
+            type='updated',
+        )
+        log_contact.save()
 
         ### add this to prevent NB sending duplicated user_created with user_language as null
         if not content['payload']['person']['user_language']:
