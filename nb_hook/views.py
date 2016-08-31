@@ -23,7 +23,7 @@ def send_to_sf(contact):
         if person['primary_address']['country_code'] == 'Other' or person['primary_address']['country_code'] == 'other':
             person['primary_address']['country_code'] = ''
     except:
-        pass
+        person['primary_address']['country_code'] = ''
 
     contact_obj = {
         'FirstName': person['first_name'],
