@@ -24,6 +24,6 @@ class Campaign(models.Model):
 
 class Log(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
-    email = models.EmailField(blank=True, null=True, unique=True)
+    email = models.EmailField(blank=True, null=True)
     contact = models.TextField(blank=True, null=True)
     type = models.CharField(blank=True, null=True, max_length=15)
