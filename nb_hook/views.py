@@ -41,10 +41,7 @@ def send_to_sf(contact):
         sf_backends.update_user(person['salesforce_id'], contact_obj)
         sf_contact_id = {'id': person['salesforce_id']}
     else:
-        try:
-            sf_contact_id = sf_backends.insert_user(contact_obj)
-        except:
-            return
+        sf_contact_id = sf_backends.insert_user(contact_obj)
         # nb_backends.nb_update_salesforce_id(person['id'], sf_contact_id['id'])  #disable to prevent record duplication
     
     #print sf_contact_id
@@ -137,7 +134,10 @@ def update(request):
             content = contact_item.contact
             content = json.loads(content)
             #print content
-            sent_to_sf =  send_to_sf(content)
+            try:
+                sent_to_sf = send_to_sf(content)
+            except:
+                sent_to_sf = None
             #sent_to_sf = True #For debug without send to salesforce
             if sent_to_sf:
                 contact_item.synced = True
