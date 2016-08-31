@@ -91,6 +91,10 @@ def hook(request):
         content = request.body
         content = json.loads(content)
 
+        ### add this to prevent NB sending duplicated user_created with user_language as null
+        if not content['payload']['person']['user_language']:
+            return HttpResponse('not saved, no user_language')
+
         ### check NB token
         if 'token' not in content:
             raise Http404("Not found")
@@ -158,6 +162,10 @@ def save_update(request):
     if request.method == "POST":
         content = request.body
         content = json.loads(content)
+
+        ### add this to prevent NB sending duplicated user_created with user_language as null
+        if not content['payload']['person']['user_language']:
+            return HttpResponse('not saved, no user_language')
 
         ### check NB token
         if 'token' not in content:
