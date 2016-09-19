@@ -4,5 +4,6 @@ from django.views.generic import TemplateView, RedirectView
 from django.conf.urls import *
 
 urlpatterns = [
-    url('^hook/', include('nb_hook.urls'))
+    url('^hook/', include('nb_hook.urls')),
+    url('^events/', include('events.urls'))
 ]

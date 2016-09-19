@@ -3,3 +3,4 @@ db.sqlite3
 settings/local.py
 .env
 *.pyc
+.idea

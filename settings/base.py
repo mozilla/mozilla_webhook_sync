@@ -41,6 +41,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'nb_hook',
+    'apis',
+    'events',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -139,6 +141,11 @@ SF_USERNAME = env('SF_USERNAME')
 SF_PASSWORD = env('SF_PASSWORD')
 SF_TOKEN = env('SF_TOKEN')
 SF_SANDBOX = env('SF_SANDBOX')
+
+SF_USERNAME_STG = env('SF_USERNAME')
+SF_PASSWORD_STG = env('SF_PASSWORD')
+SF_TOKEN_STG = env('SF_TOKEN')
+SF_SANDBOX_STG = env('SF_SANDBOX')
 
 NB_NATION_SLUG = env('NB_NATION_SLUG')
 NB_API_KEY = env('NB_API_KEY')

@@ -5,3 +5,4 @@ psycopg2==2.6.1
 whitenoise==2.0.6
 simple_salesforce==0.69
 requests==2.11.1
+django-annoying==0.10.1

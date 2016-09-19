@@ -1,8 +1,9 @@
 from django.conf.urls import *
-from . import views
+from . import views, views_v1
 
 urlpatterns = [
-    url(r'^$', views.hook, name='hook'),
-    url(r'^update/$', views.update, name='update'),
-    url(r'^save_update/$', views.save_update, name='save_update')
+    url(r'^$', views_v1.hook, name='hook'),
+
+    url(r'^save_user/$', views.create_hook, name='save_user'),
+    url(r'^save_update/$', views.update_hook, name='save_update'),
 ]

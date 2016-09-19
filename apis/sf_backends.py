@@ -8,7 +8,7 @@ def get_sf_session():
     return Salesforce(username=settings.SF_USERNAME,
                       password=settings.SF_PASSWORD,
                       security_token=settings.SF_TOKEN,
-                      sandbox=False,
+                      sandbox=settings.SF_SANDBOX,
                       session=session,
                       )
 
@@ -16,6 +16,12 @@ def get_sf_session():
 def fetch_user(object_id):
     sf = get_sf_session()
     return sf.Contact.get(object_id)
+
+
+def fetch_user_by_email(email):
+    sf = get_sf_session()
+    query = "select id from Contact where Email = '{0}'".format(email)
+    return sf.query_all(query)
 
 
 def insert_user(object):
@@ -54,7 +60,18 @@ def fetch_campaign_by_name(name):
 
 def insert_campaign(object):
     sf = get_sf_session()
-    return sf.Campaign.create(object)
+    query = "select Id from Campaign where Name = '{0}'".format(object['Name'])
+    results = sf.query_all(query)
+    try:
+        object_id = results['records'][0]['Id']
+    except:
+        object_id = None
+
+    if object_id is not None:
+        sf.Campaign.update(object_id, object)
+        return {'id': object_id}
+    else:
+        return sf.Campaign.create(object)
 
 
 def upsert_contact_to_campaign(object):
@@ -81,3 +98,21 @@ def upsert_contact_to_campaign(object):
 def fetch_campaign_member(object_id):
     sf = get_sf_session()
     return sf.CampaignMember.get(object_id)
+
+
+def upsert_campaign(object):
+    sf = get_sf_session()
+
+    query = "select id from Campaign where Name = '{0'".format(object['Name'])
+    results = sf.query_all(query)
+
+    try:
+        object_id = results['records'][0]['Id']
+    except:
+        object_id = None
+
+    if object_id is not None:
+        sf.Campaign.update(object_id, object)
+        return {'id': object_id}
+    else:
+        return sf.Campaign.create(object)
