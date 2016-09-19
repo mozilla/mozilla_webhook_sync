@@ -142,14 +142,17 @@ def compare_nb_dj_member_list(nb_list):
             user_language = determine_user_language(user_details)
             country_code = determine_country_code(user_details)
 
-            sf_contact_id = sf_backends.insert_user({
-                'FirstName': user_details['person']['first_name'],
-                'LastName': user_details['person']['last_name'],
-                'Email': user_details['person']['email'],
-                'MailingCountryCode': country_code,
-                'Email_Language__c': user_language,
-                'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
-            })
+            try:
+                sf_contact_id = sf_backends.insert_user({
+                    'FirstName': user_details['person']['first_name'],
+                    'LastName': user_details['person']['last_name'],
+                    'Email': user_details['person']['email'],
+                    'MailingCountryCode': country_code,
+                    'Email_Language__c': user_language,
+                    'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
+                })
+            except:
+                continue
 
             obj = CampaignMember(
                 campaign_id=event_dj,
