@@ -93,7 +93,7 @@ def send_petition_user_to_sf(contact, campaign_name):
         'Subscriber__c': person['email_opt_in'],
         'Sub_Mozilla_Foundation__c': person['email_opt_in'],
         'Email_Language__c': person['user_language'],
-        'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID  # advocacy record type
+        'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
         }
 
     if person['salesforce_id']:  # not used because we are not saving salesforce ID back
@@ -179,7 +179,7 @@ def send_event_user_to_sf(contact, campaign_name):
         'Email': person['email'],
         'MailingCountryCode': country_code,
         'Email_Language__c': person['user_language'],
-        'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID  # advocacy record type
+        'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
     }
 
     if person['salesforce_id']:  # not used because we are not saving salesforce ID back

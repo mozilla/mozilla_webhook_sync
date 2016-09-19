@@ -72,7 +72,7 @@ def fetch_save_event(event):
             'Email': creator['person']['email'],
             'MailingCountryCode': country_code,
             'Email_Language__c': user_language,
-            'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID  # advocacy record type
+            'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
         })
 
         # create or update creator user fb_id from Salesforce via email from event obj
@@ -149,7 +149,7 @@ def compare_nb_dj_member_list(nb_list):
                 'Email': user_details['person']['email'],
                 'MailingCountryCode': country_code,
                 'Email_Language__c': user_language,
-                'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID  # advocacy record type
+                'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
             })
 
             obj = CampaignMember(
