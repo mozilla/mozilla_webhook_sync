@@ -77,7 +77,7 @@ def fetch_save_event(event):
                 'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
             })
         except:
-            continue
+            return False
 
         # insert campaign to SF and get the sf_campaign_id
         event_sf_obj = {
@@ -98,7 +98,7 @@ def fetch_save_event(event):
             )
             event_dj_obj.save()
         except:
-            continue
+            return False
     else:
         event_dj_obj = {
             'name': event_dj.name,
