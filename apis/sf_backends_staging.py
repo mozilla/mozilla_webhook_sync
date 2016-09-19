@@ -1,7 +1,7 @@
 from simple_salesforce import Salesforce
 import requests
 from django.conf import settings
-import json.dumps
+import json
 
 def get_sf_session():
     session = requests.Session()
