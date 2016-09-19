@@ -66,7 +66,8 @@ def fetch_save_event(event):
         user_language = determine_user_language(creator)
         country_code = determine_country_code(creator)
 
-        sf_contact_id = sf_backends.insert_user({
+        # create or update creator user fb_id from Salesforce via email from event obj
+        creator_sf_id = sf_backends.insert_user({
             'FirstName': creator['person']['first_name'],
             'LastName': creator['person']['last_name'],
             'Email': creator['person']['email'],
@@ -75,9 +76,7 @@ def fetch_save_event(event):
             'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
         })
 
-        # create or update creator user fb_id from Salesforce via email from event obj
 
-        creator_sf_obj = sf_backends.insert_user(sf_contact_id)
 
         # insert campaign to SF and get the sf_campaign_id
         event_sf_obj = {
@@ -93,7 +92,7 @@ def fetch_save_event(event):
             nb_id=event['id'],
             sf_id=sf_campaign_id['id'],
             type='Event',
-            creator_sf_id=creator_sf_obj['id'],
+            creator_sf_id=creator_sf_id['id'],
         )
         event_dj_obj.save()
     else:
