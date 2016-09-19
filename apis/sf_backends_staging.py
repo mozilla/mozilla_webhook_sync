@@ -1,8 +1,7 @@
 from simple_salesforce import Salesforce
 import requests
 from django.conf import settings
-import re
-
+import json.dumps
 
 def get_sf_session():
     session = requests.Session()
@@ -55,13 +54,13 @@ def fetch_campaign(object_id):
 
 def fetch_campaign_by_name(name):
     sf = get_sf_session()
-    query = "select id from Campaign where Name = '{0}'".format(re.escape(name))
+    query = 'select id from Campaign where Name = "{0}"'.format(json.dumps(name))
     return sf.query_all(query)
 
 
 def insert_campaign(object):
     sf = get_sf_session()
-    query = "select Id from Campaign where Name = '{0}'".format(re.escape(object['Name']))
+    query = 'select Id from Campaign where Name = "{0}"'.format(json.dumps(object['Name']))
     results = sf.query_all(query)
     try:
         object_id = results['records'][0]['Id']
@@ -79,8 +78,7 @@ def upsert_contact_to_campaign(object):
     sf = get_sf_session()
 
     # search for existing user
-    query = "select id from CampaignMember where ContactId = '{0}' " \
-            "and CampaignId = '{1}'".format(object['ContactId'], re.escape(object['CampaignId']))
+    query = 'select id from CampaignMember where ContactId = "{0}" and CampaignId = "{1}"'.format(object['ContactId'], json.dumps(object['CampaignId']))
     results = sf.query_all(query)
     try:
         object_id = results['records'][0]['Id']
@@ -104,7 +102,7 @@ def fetch_campaign_member(object_id):
 def upsert_campaign(object):
     sf = get_sf_session()
 
-    query = "select id from Campaign where Name = '{0'".format(re.escape(object['Name']))
+    query = 'select id from Campaign where Name = "{0}"'.format(json.dumps(object['Name']))
     results = sf.query_all(query)
 
     try:
