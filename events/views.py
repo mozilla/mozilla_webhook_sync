@@ -14,10 +14,10 @@ import json
 #     return LastSync.objects.get(id=1)
 #
 #
-def update_last_sync_datetime():
-    obj = LastSync(last_sync=timezone.now)
-    obj.save()
-    return obj
+# def update_last_sync_datetime():
+#     obj = LastSync(last_sync=timezone.now)
+#     obj.save()
+#     return obj
 
 
 def run(request):
@@ -39,7 +39,7 @@ def run(request):
         event_dj = fetch_save_event(event)
         if event_dj is not False:
             record_campaign_members(event['id'])
-    update_last_sync_datetime()
+    # update_last_sync_datetime()
     return HttpResponse('done')
 
 
