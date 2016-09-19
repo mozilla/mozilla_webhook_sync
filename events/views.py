@@ -67,34 +67,38 @@ def fetch_save_event(event):
         country_code = determine_country_code(creator)
 
         # create or update creator user fb_id from Salesforce via email from event obj
-        creator_sf_id = sf_backends.insert_user({
-            'FirstName': creator['person']['first_name'],
-            'LastName': creator['person']['last_name'],
-            'Email': creator['person']['email'],
-            'MailingCountryCode': country_code,
-            'Email_Language__c': user_language,
-            'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
-        })
-
-
+        try:
+            creator_sf_id = sf_backends.insert_user({
+                'FirstName': creator['person']['first_name'],
+                'LastName': creator['person']['last_name'],
+                'Email': creator['person']['email'],
+                'MailingCountryCode': country_code,
+                'Email_Language__c': user_language,
+                'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
+            })
+        except:
+            continue
 
         # insert campaign to SF and get the sf_campaign_id
         event_sf_obj = {
             'Name': 'Maker Events - ' + event['name'],
             'Type': 'Event'
         }
-        sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
+        try:
+            sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
 
-        # save obj to DJ Campaign table
-        event_dj_obj = Campaign(
-            name=event['name'],
-            start_time=event['start_time'],
-            nb_id=event['id'],
-            sf_id=sf_campaign_id['id'],
-            type='Event',
-            creator_sf_id=creator_sf_id['id'],
-        )
-        event_dj_obj.save()
+            # save obj to DJ Campaign table
+            event_dj_obj = Campaign(
+                name=event['name'],
+                start_time=event['start_time'],
+                nb_id=event['id'],
+                sf_id=sf_campaign_id['id'],
+                type='Event',
+                creator_sf_id=creator_sf_id['id'],
+            )
+            event_dj_obj.save()
+        except:
+            continue
     else:
         event_dj_obj = {
             'name': event_dj.name,
