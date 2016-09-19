@@ -176,7 +176,7 @@ def determine_country_code(nb_person_obj):
             country_code = ''
         else:
             country_code = nb_person_obj['person']['primary_address']['country_code']
-    except KeyError:
+    except:
         country_code = ''
 
     return country_code
