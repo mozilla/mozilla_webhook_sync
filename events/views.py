@@ -237,36 +237,36 @@ def insert_address(obj):
             address = obj['venue']['name'] + ', '
         except:
             pass
-    if 'address1' in nb_address and not nb_address['address1']:
-        try:
+    try:
+        if nb_address['address1'] is not None:
             address = nb_address['address1'] + ', '
-        except:
-            pass
-    if 'address2' in nb_address and not nb_address['address2']:
-        try:
+    except:
+        pass
+    try:
+        if nb_address['address2'] is not None:
             address = address + nb_address['address2'] + ', '
-        except:
-            pass
-    if 'city' in nb_address and not nb_address['city']:
-        try:
+    except:
+        pass
+    try:
+        if nb_address['city'] is not None:
             address = address + nb_address['city'] + ', '
-        except:
-            pass
-    if 'state' in nb_address and not nb_address['state']:
-        try:
+    except:
+        pass
+    try:
+        if nb_address['state'] is not None:
             address = address + nb_address['state'] + ', '
-        except:
-            pass
-    if 'zip' in nb_address and not nb_address['zip']:
-        try:
+    except:
+        pass
+    try:
+        if nb_address['zip'] is not None:
             address = address + nb_address['zip'] + ', '
-        except:
-            pass
-    if 'country_code' in nb_address and not nb_address['country_code']:
-        try:
+    except:
+        pass
+    try:
+        if nb_address['country_code'] is not None:
             address = address + nb_address['country_code']
-        except:
-            pass
+    except:
+        pass
     return address
 
 
