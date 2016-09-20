@@ -20,6 +20,10 @@ import json
 #     return obj
 
 
+# def get_person_info(request):
+#     print (sf_backends.fetch_user('00321000007r4sW'))
+#     return HttpResponse('test')
+
 def run(request):
     """
     URL to run the sync
@@ -72,7 +76,13 @@ def fetch_save_event(event):
                 'FirstName': creator['person']['first_name'],
                 'LastName': creator['person']['last_name'],
                 'Email': creator['person']['email'],
+                'MailingStreet': creator['person']['primary_address']['address1'],
+                'MailingCity': creator['person']['primary_address']['ciyu'],
+                'MailingState': creator['person']['primary_address']['state'],
+                'MailingPostalCode': creator['person']['primary_address']['zip'],
+                # 'MailingStateCode': creator['person']['primary_address']['state'],
                 'MailingCountryCode': country_code,
+
                 'Email_Language__c': user_language,
                 'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
             })
@@ -151,6 +161,10 @@ def compare_nb_dj_member_list(nb_list):
                     'FirstName': user_details['person']['first_name'],
                     'LastName': user_details['person']['last_name'],
                     'Email': user_details['person']['email'],
+                    'MailingStreet': creator['person']['primary_address']['address1'],
+                    'MailingCity': creator['person']['primary_address']['ciyu'],
+                    'MailingState': creator['person']['primary_address']['state'],
+                    'MailingPostalCode': creator['person']['primary_address']['zip'],
                     'MailingCountryCode': country_code,
                     'Email_Language__c': user_language,
                     'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
