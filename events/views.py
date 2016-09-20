@@ -113,7 +113,7 @@ def fetch_save_event(event):
         except:
             return False
     else:
-        event_nb = nb_backends.fetch_event(event.dj.nb_id).json()
+        event_nb = nb_backends.fetch_event(event_dj.nb_id).json()
         if event_nb != event:
             event_sf_obj = {
                 'Name': 'Maker Events - ' + event['name'],
