@@ -14,10 +14,10 @@ import json
 #     return LastSync.objects.get(id=1)
 #
 #
-def update_last_sync_datetime():
-    obj = LastSync(last_sync=timezone.now)
-    obj.save()
-    return obj
+# def update_last_sync_datetime():
+#     obj = LastSync(last_sync=timezone.now)
+#     obj.save()
+#     return obj
 
 
 def run(request):
@@ -243,7 +243,7 @@ def insert_address(obj):
     except:
         pass
     try:
-        if nb_address['address2'] is not None or not nb_address['address2'].strip():
+        if nb_address['address2'] is not None and not nb_address['address2'].strip():
             address = address + nb_address['address2'] + ', '
     except:
         pass
