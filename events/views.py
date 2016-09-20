@@ -129,9 +129,9 @@ def fetch_save_event(event):
                 'creator_sf_id': event_dj.creator_sf_id,
                 'content': event_nb['event'],
             }
-            event_dj.name = event_nb['name']
-            event_dj.start_time = event_nb['start_time']
-            event_dj.content = event_nb
+            event_dj.name = event_nb['event']['name']
+            event_dj.start_time = event_nb['event']['start_time']
+            event_dj.content = event_nb['event']
             event_dj.save()
         else:
             event_dj_obj = {
