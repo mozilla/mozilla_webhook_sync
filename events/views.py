@@ -92,7 +92,9 @@ def fetch_save_event(event):
         # insert campaign to SF and get the sf_campaign_id
         event_sf_obj = {
             'Name': 'Maker Events - ' + event['name'],
-            'Type': 'Event'
+            'Type': 'Event',
+            'Location__c': insert_address(event)
+
         }
         try:
             sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
@@ -201,6 +203,51 @@ def determine_country_code(nb_person_obj):
         country_code = ''
 
     return country_code
+
+
+def insert_address(obj):
+    if 'venue' not in obj:
+        return ''
+    else:
+        nb_address = obj['venue']['address']
+
+    address = ''
+    if 'name' in obj['venue']:
+        try:
+            address = obj['venue'] + ', '
+        except KeyError:
+            pass
+    if 'address1' in nb_address:
+        try:
+            address = nb_address['address1'] + ', '
+        except KeyError:
+            pass
+    if 'address2' in nb_address:
+        try:
+            address = address + nb_address['address2'] + ', '
+        except KeyError:
+            pass
+    if 'city' in nb_address:
+        try:
+            address = address + nb_address['city'] + ', '
+        except KeyError:
+            pass
+    if 'state' in nb_address:
+        try:
+            address = address + nb_address['state'] + ', '
+        except KeyError:
+            pass
+    if 'zip' in nb_address:
+        try:
+            address = address + nb_address['zip'] + ', '
+        except KeyError:
+            pass
+    if 'country' in nb_address:
+        try:
+            address = address + nb_address['country_code']
+        except KeyError:
+            pass
+    return address
 
 
 def determine_user_language(nb_person_obj):
