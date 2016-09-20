@@ -107,9 +107,9 @@ def fetch_save_event(event):
             return False
     else:
         # if event was updated less than 30 minutes ago, skip it
-        if event_dj.sync_time <= timezone.now() - timezone.timedelta(minutes=30):
+        if event_dj.sync_time > timezone.now() - timezone.timedelta(minutes=30):
             return False
-        
+
         event_nb = nb_backends.fetch_event(event_dj.nb_id).json()
         if event_nb != event:
             event_sf_obj = {
