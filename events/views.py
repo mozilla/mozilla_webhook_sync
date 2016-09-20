@@ -214,7 +214,7 @@ def insert_address(obj):
     address = ''
     if 'name' in obj['venue']:
         try:
-            address = obj['venue'] + ', '
+            address = obj['venue']['name'] + ', '
         except KeyError:
             pass
     if 'address1' in nb_address:
