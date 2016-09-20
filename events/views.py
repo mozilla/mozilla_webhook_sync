@@ -14,15 +14,11 @@ import json
 #     return LastSync.objects.get(id=1)
 #
 #
-# def update_last_sync_datetime():
-#     obj = LastSync(last_sync=timezone.now)
-#     obj.save()
-#     return obj
+def update_last_sync_datetime():
+    obj = LastSync(last_sync=timezone.now)
+    obj.save()
+    return obj
 
-
-# def get_person_info(request):
-#     print (sf_backends.fetch_user('00321000007r4sW'))
-#     return HttpResponse('test')
 
 def run(request):
     """
@@ -62,6 +58,11 @@ def fetch_save_event(event):
 
     # check if event exists in Salesforce
     event_dj = get_object_or_None(Campaign, nb_id=event['id'])
+
+    # if event was updated less than 30 minutes ago, skip it
+    if event_dj.sync_time <= timezone.now() - timezone.timedelta(minutes=30):
+        return False
+
     if not event_dj:
         # fetch creator user nb_id from Nationbuilder via author_id in event obj
         if event['author_id'] is None:
@@ -76,11 +77,6 @@ def fetch_save_event(event):
                 'FirstName': creator['person']['first_name'],
                 'LastName': creator['person']['last_name'],
                 'Email': creator['person']['email'],
-                # 'MailingStreet': creator['person']['primary_address']['address1'],
-                # 'MailingCity': creator['person']['primary_address']['city'],
-                # 'MailingState': creator['person']['primary_address']['state'],
-                # 'MailingPostalCode': creator['person']['primary_address']['zip'],
-                # 'MailingStateCode': creator['person']['primary_address']['state'],
                 'MailingCountryCode': country_code,
 
                 'Email_Language__c': user_language,
@@ -99,6 +95,7 @@ def fetch_save_event(event):
         try:
             sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
             event_nb = nb_backends.fetch_event(event['id']).json()
+
             # save obj to DJ Campaign table
             event_dj_obj = Campaign(
                 name=event['name'],
@@ -132,6 +129,7 @@ def fetch_save_event(event):
             event_dj.name = event_nb['event']['name']
             event_dj.start_time = event_nb['event']['start_time']
             event_dj.content = event_nb['event']
+            event_dj.sync_time = timezone.now
             event_dj.save()
         else:
             event_dj_obj = {
