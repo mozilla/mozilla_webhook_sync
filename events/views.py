@@ -59,10 +59,6 @@ def fetch_save_event(event):
     # check if event exists in Salesforce
     event_dj = get_object_or_None(Campaign, nb_id=event['id'])
 
-    # if event was updated less than 30 minutes ago, skip it
-    if event_dj.sync_time <= timezone.now() - timezone.timedelta(minutes=30):
-        return False
-
     if not event_dj:
         # fetch creator user nb_id from Nationbuilder via author_id in event obj
         if event['author_id'] is None:
@@ -110,6 +106,10 @@ def fetch_save_event(event):
         except:
             return False
     else:
+        # if event was updated less than 30 minutes ago, skip it
+        if event_dj.sync_time <= timezone.now() - timezone.timedelta(minutes=30):
+            return False
+        
         event_nb = nb_backends.fetch_event(event_dj.nb_id).json()
         if event_nb != event:
             event_sf_obj = {
