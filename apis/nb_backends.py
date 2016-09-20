@@ -43,5 +43,9 @@ def fetch_events():
     return get_endpoint('sites/makerevents/pages/events?limit=5000')
 
 
+def fetch_event(event_id):
+    return get_endpoint('sites/makerevents/pages/events/'+str(event_id))
+
+
 def fetch_event_rsvps(event_id):
     return get_endpoint('sites/makerevents/pages/events/{0}/rsvps?limit=5000'.format(event_id))

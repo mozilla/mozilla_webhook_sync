@@ -98,7 +98,7 @@ def fetch_save_event(event):
         }
         try:
             sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
-
+            event_nb = nb_backends.fetch_event(event['id']).json()
             # save obj to DJ Campaign table
             event_dj_obj = Campaign(
                 name=event['name'],
@@ -107,20 +107,42 @@ def fetch_save_event(event):
                 sf_id=sf_campaign_id['id'],
                 type='Event',
                 creator_sf_id=creator_sf_id['id'],
+                content=event_nb,
             )
             event_dj_obj.save()
         except:
             return False
     else:
-        event_dj_obj = {
-            'name': event_dj.name,
-            'start_time':  event_dj.start_time,
-            'nb_id': event_dj.nb_id,
-            'sf_id': event_dj.sf_id,
-            'type': event_dj.type,
-            'creator_sf_id': event_dj.creator_sf_id
-        }
-        # event_dj_obj = event_dj
+        event_nb = nb_backends.fetch_event(event.dj.nb_id).json()
+        if event_nb != event:
+            event_sf_obj = {
+                'Name': 'Maker Events - ' + event['name'],
+                'Type': 'Event',
+                'Location__c': insert_address(event)
+            }
+            sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
+
+            event_dj_obj = {
+                'name': event_nb['name'],
+                'start_time': event_nb['start_time'],
+                'type': event_dj.type,
+                'creator_sf_id': event_dj.creator_sf_id,
+                'content': event_nb,
+            }
+            event_dj.name = event_nb['name']
+            event_dj.start_time = event_nb['start_time']
+            event_dj.content = event_nb
+            event_dj.save()
+        else:
+            event_dj_obj = {
+                'name': event_dj.name,
+                'start_time':  event_dj.start_time,
+                'nb_id': event_dj.nb_id,
+                'sf_id': event_dj.sf_id,
+                'type': event_dj.type,
+                'creator_sf_id': event_dj.creator_sf_id,
+                'content': event_nb,
+            }
 
     return event_dj_obj
 
