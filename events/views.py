@@ -242,7 +242,7 @@ def insert_address(obj):
             address = address + nb_address['zip'] + ', '
         except:
             pass
-    if 'country' in nb_address:
+    if 'country_code' in nb_address:
         try:
             address = address + nb_address['country_code']
         except:
