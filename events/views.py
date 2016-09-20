@@ -215,37 +215,37 @@ def insert_address(obj):
     if 'name' in obj['venue']:
         try:
             address = obj['venue']['name'] + ', '
-        except KeyError:
+        except:
             pass
     if 'address1' in nb_address:
         try:
             address = nb_address['address1'] + ', '
-        except KeyError:
+        except:
             pass
     if 'address2' in nb_address:
         try:
             address = address + nb_address['address2'] + ', '
-        except KeyError:
+        except:
             pass
     if 'city' in nb_address:
         try:
             address = address + nb_address['city'] + ', '
-        except KeyError:
+        except:
             pass
     if 'state' in nb_address:
         try:
             address = address + nb_address['state'] + ', '
-        except KeyError:
+        except:
             pass
     if 'zip' in nb_address:
         try:
             address = address + nb_address['zip'] + ', '
-        except KeyError:
+        except:
             pass
     if 'country' in nb_address:
         try:
             address = address + nb_address['country_code']
-        except KeyError:
+        except:
             pass
     return address
 
