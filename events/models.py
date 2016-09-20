@@ -13,6 +13,7 @@ class Campaign(models.Model):
     sf_id = models.CharField(max_length=255, blank=True, null=True)
     type = models.CharField(max_length=255, default='Event')
     creator_sf_id = models.CharField(max_length=255, blank=True, null=True)
+    content = models.TextField(blank=True, null=True)
 
 
 class CampaignMember(models.Model):

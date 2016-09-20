@@ -107,7 +107,7 @@ def fetch_save_event(event):
                 sf_id=sf_campaign_id['id'],
                 type='Event',
                 creator_sf_id=creator_sf_id['id'],
-                content=event_nb,
+                content=event_nb['event'],
             )
             event_dj_obj.save()
         except:
@@ -123,11 +123,11 @@ def fetch_save_event(event):
             sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
 
             event_dj_obj = {
-                'name': event_nb['name'],
-                'start_time': event_nb['start_time'],
+                'name': event_nb['event']['name'],
+                'start_time': event_nb['event']['start_time'],
                 'type': event_dj.type,
                 'creator_sf_id': event_dj.creator_sf_id,
-                'content': event_nb,
+                'content': event_nb['event'],
             }
             event_dj.name = event_nb['name']
             event_dj.start_time = event_nb['start_time']
