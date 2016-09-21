@@ -172,9 +172,9 @@ def record_campaign_members(event_nb_id):
 
 def compare_nb_dj_member_list(nb_list):
     for nb_member in nb_list:
+        print nb_member
         if not CampaignMember.objects.filter(member_nb_id=nb_member['person_id']).exists():
             user_details = nb_backends.fetch_user(nb_member['person_id']).json()
-
             event_dj = get_object_or_None(Campaign, nb_id=nb_member['event_id'])
 
             user_language = determine_user_language(user_details)
@@ -185,10 +185,6 @@ def compare_nb_dj_member_list(nb_list):
                     'FirstName': user_details['person']['first_name'],
                     'LastName': user_details['person']['last_name'],
                     'Email': user_details['person']['email'],
-                    # 'MailingStreet': user_details['person']['primary_address']['address1'],
-                    # 'MailingCity': user_details['person']['primary_address']['city'],
-                    # 'MailingState': user_details['person']['primary_address']['state'],
-                    # 'MailingPostalCode': user_details['person']['primary_address']['zip'],
                     'MailingCountryCode': country_code,
                     'Email_Language__c': user_language,
                     'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
