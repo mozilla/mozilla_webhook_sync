@@ -236,12 +236,12 @@ def insert_address(obj):
     address = ''
     if 'name' in obj['venue']:
         try:
-            address = obj['venue']['name'] + ', '
+            address = obj['venue']['name']
         except:
             pass
     try:
         if nb_address['address1'] != "":
-            address = nb_address['address1'] + ', '
+            address = address + nb_address['address1'] + ', '
     except:
         pass
     try:
@@ -269,6 +269,8 @@ def insert_address(obj):
             address = address + nb_address['country_code']
     except:
         pass
+    address = address.strip()
+    address = address.strip(',')
     return address
 
 
