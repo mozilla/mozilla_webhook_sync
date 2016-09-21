@@ -236,7 +236,7 @@ def insert_address(obj):
     address = ''
     if 'name' in obj['venue']:
         try:
-            address = obj['venue']['name']
+            address = obj['venue']['name'] + ', '
         except:
             pass
     try:
