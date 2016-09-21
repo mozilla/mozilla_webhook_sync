@@ -132,6 +132,8 @@ def fetch_save_event(event):
             event_dj.sync_time = timezone.now()
             event_dj.save()
         else:
+            event_dj.sync_time = timezone.now()
+            event_dj.save()
             event_dj_obj = {
                 'name': event_dj.name,
                 'start_time':  event_dj.start_time,
