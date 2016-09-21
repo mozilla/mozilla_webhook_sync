@@ -244,7 +244,7 @@ def insert_address(obj):
         pass
     try:
         print 'address is/' + nb_address['address2'] + '/end'
-        if nb_address['address2'] is not None or not nb_address['address2']:
+        if not nb_address['address2']:
             address = address + nb_address['address2'] + ', '
         else:
             address = address
