@@ -238,36 +238,32 @@ def insert_address(obj):
         except:
             pass
     try:
-        if nb_address['address1'] is not None or nb_address['address1'] != '':
+        if nb_address['address1'] != "":
             address = nb_address['address1'] + ', '
     except:
         pass
     try:
-        print 'address is/' + nb_address['address2'] + '/end'
         if nb_address['address2'] != "":
             address = address + nb_address['address2'] + ', '
-        else:
-            address = address
-            print 'skip address2'
     except:
         pass
     try:
-        if nb_address['city'] is not None or nb_address['city'] != '':
+        if nb_address['city'] != "":
             address = address + nb_address['city'] + ', '
     except:
         pass
     try:
-        if nb_address['state'] is not None or nb_address['state'] != '':
+        if nb_address['state'] != "":
             address = address + nb_address['state'] + ', '
     except:
         pass
     try:
-        if nb_address['zip'] is not None or nb_address['zip'] != '':
+        if nb_address['zip'] != "":
             address = address + nb_address['zip'] + ', '
     except:
         pass
     try:
-        if nb_address['country_code'] is not None or nb_address['country_code'] != '':
+        if nb_address['country_code'] != "":
             address = address + nb_address['country_code']
     except:
         pass
