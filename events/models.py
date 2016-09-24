@@ -15,9 +15,9 @@ class Campaign(models.Model):
     type = models.CharField(max_length=255, default='Event')
     creator_sf_id = models.CharField(max_length=255, blank=True, null=True)
     content = models.TextField(blank=True, null=True)
-    sync_time = models.DateTimeField(default=timezone.now, blank=True, null=True)
+    sync_time = models.DateTimeField(default=timezone.now)
     parent_id = models.CharField(max_length=255, default=settings.EVENT_PARENT_ID)
-    email_opt_in = models.BooleanField(default=False)
+    # email_opt_in = models.BooleanField(default=False)
 
 
 class CampaignMember(models.Model):
