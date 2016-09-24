@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from django.utils import timezone
 from django.db import models
 
+from django.conf import settings
 # Create your models here.
 
 
@@ -15,6 +16,8 @@ class Campaign(models.Model):
     creator_sf_id = models.CharField(max_length=255, blank=True, null=True)
     content = models.TextField(blank=True, null=True)
     sync_time = models.DateTimeField(default=timezone.now, blank=True, null=True)
+    parent_id = models.CharField(max_length=255, default=settings.EVENT_PARENT_ID)
+    email_opt_in = models.BooleanField(default=False)
 
 
 class CampaignMember(models.Model):

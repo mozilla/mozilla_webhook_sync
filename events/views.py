@@ -20,6 +20,11 @@ import json
 #     return obj
 
 
+# def test(request):
+#     print sf_backends.fetch_campaign('701210000001uvd')
+#     return HttpResponse('test')
+
+
 def run(request):
     """
     URL to run the sync
@@ -74,19 +79,20 @@ def fetch_save_event(event):
                 'LastName': creator['person']['last_name'],
                 'Email': creator['person']['email'],
                 'MailingCountryCode': country_code,
-
                 'Email_Language__c': user_language,
-                'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
+                'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG,  # advocacy record type
+
+                'Sub_Maker_party__c': True
             })
         except:
             return False
 
         # insert campaign to SF and get the sf_campaign_id
         event_sf_obj = {
-            'Name': 'Maker Events - ' + event['name'],
+            'Name': event['name'],
             'Type': 'Event',
-            'Location__c': insert_address(event)
-
+            'Location__c': insert_address(event),
+            'parentId': settings.EVENT_PARENT_ID
         }
         try:
             sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
@@ -101,6 +107,7 @@ def fetch_save_event(event):
                 type='Event',
                 creator_sf_id=creator_sf_id['id'],
                 content=event_nb['event'],
+                parent_id=settings.EVENT_PARENT_ID
             )
             event_dj_obj.save()
         except:
@@ -113,9 +120,10 @@ def fetch_save_event(event):
         event_nb = nb_backends.fetch_event(event_dj.nb_id).json()
         if event_nb != event:
             event_sf_obj = {
-                'Name': 'Maker Events - ' + event['name'],
+                'Name': event['name'],
                 'Type': 'Event',
-                'Location__c': insert_address(event)
+                'Location__c': insert_address(event),
+                'parentId': settings.EVENT_PARENT_ID
             }
             sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
 
@@ -187,6 +195,7 @@ def compare_nb_dj_member_list(nb_list):
                     'MailingCountryCode': country_code,
                     'Email_Language__c': user_language,
                     'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
+                    # 'Campaign_Email_Opt_In__c': user_details['person']['email_opt_in']
                 })
             except:
                 continue

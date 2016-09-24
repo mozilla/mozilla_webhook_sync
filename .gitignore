@@ -4,3 +4,4 @@ settings/local.py
 .env
 *.pyc
 .idea
+.DS_Store
