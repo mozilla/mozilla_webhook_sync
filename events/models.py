@@ -17,6 +17,7 @@ class Campaign(models.Model):
     content = models.TextField(blank=True, null=True)
     sync_time = models.DateTimeField(default=timezone.now)
     parent_id = models.CharField(max_length=255, default=settings.EVENT_PARENT_ID)
+    active = models.BooleanField(default=True)
     # email_opt_in = models.BooleanField(default=False)
 
 

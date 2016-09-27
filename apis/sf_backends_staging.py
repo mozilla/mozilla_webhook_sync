@@ -74,6 +74,14 @@ def insert_campaign(object):
         return sf.Campaign.create(object)
 
 
+def delete_campaign(object_id):
+    sf = get_sf_session()
+    try:
+        return sf.Campaign.delete(object_id)
+    except:
+        return False
+
+
 def upsert_contact_to_campaign(object):
     sf = get_sf_session()
 

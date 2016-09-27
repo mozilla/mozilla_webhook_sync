@@ -34,6 +34,8 @@ def run(request):
     Returns:
         HttpResponse
     """
+
+    #if no token is presented, go to 404 error.
     if request.method == "GET":
         token = request.GET.get('token')
         if token != settings.NB_TOKEN:
@@ -44,7 +46,21 @@ def run(request):
         event_dj = fetch_save_event(event)
         if event_dj is not False:
             record_campaign_members(event['id'])
-    # update_last_sync_datetime()
+
+    campaigns = Campaign.objects.all()
+
+    nb_list = []
+    dj_list = []
+    for event in event_list['results']:
+        nb_list.append(event['id'])
+
+    for campaign in campaigns:
+        dj_list.append(campaign.nb_id)
+
+    for dj_item_id in dj_list:
+        if dj_item_id not in nb_list:
+            remove_campaign(dj_item_id)
+
     return HttpResponse('done')
 
 
@@ -107,7 +123,8 @@ def fetch_save_event(event):
                 type='Event',
                 creator_sf_id=creator_sf_id['id'],
                 content=event_nb['event'],
-                parent_id=settings.EVENT_PARENT_ID
+                parent_id=settings.EVENT_PARENT_ID,
+                active=True,
             )
             event_dj_obj.save()
         except:
@@ -216,6 +233,11 @@ def compare_nb_dj_member_list(nb_list):
                 'Campaign_Member_Type__c': "Attendee",
                 'Attended_Before__c': 'no',
             })
+
+
+def remove_campaign(nb_id):
+    campaign = Campaign.objects.filter(nb_id=nb_id).update(active=False)
+    sf_backends.delete_campaign(campaign.sf_id)
 
 
 def determine_country_code(nb_person_obj):
