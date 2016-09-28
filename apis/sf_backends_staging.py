@@ -8,7 +8,7 @@ def get_sf_session():
     return Salesforce(username=settings.SF_USERNAME_STG,
                       password=settings.SF_PASSWORD_STG,
                       security_token=settings.SF_TOKEN_STG,
-                      sandbox=True,
+                      sandbox=False,
                       session=session,
                       )
 
