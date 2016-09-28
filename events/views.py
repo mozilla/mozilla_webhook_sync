@@ -225,14 +225,16 @@ def compare_nb_dj_member_list(nb_list):
                 campaign_language=user_language
             )
             obj.save()
-
-            sf_backends.upsert_contact_to_campaign({
-                'ContactId': sf_contact_id['id'],
-                'CampaignId': event_dj.sf_id,
-                'Campaign_Language__c': user_details['person']['user_language'],
-                'Campaign_Member_Type__c': "Attendee",
-                'Attended_Before__c': 'no',
-            })
+            try:
+                sf_backends.upsert_contact_to_campaign({
+                    'ContactId': sf_contact_id['id'],
+                    'CampaignId': event_dj.sf_id,
+                    'Campaign_Language__c': user_details['person']['user_language'],
+                    'Campaign_Member_Type__c': "Attendee",
+                    'Attended_Before__c': 'no',
+                })
+            except:
+                continue
 
 
 def remove_campaign(nb_id):
