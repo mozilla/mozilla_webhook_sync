@@ -238,7 +238,7 @@ def compare_nb_dj_member_list(nb_list):
 
 
 def remove_campaign(nb_id):
-    campaign = Campaign.objects.filter(nb_id=nb_id).update(active=False)
+    campaign = Campaign.objects.get(nb_id=nb_id).update(active=False)
     sf_backends.delete_campaign(campaign.sf_id)
 
 
