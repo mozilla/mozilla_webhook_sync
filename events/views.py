@@ -80,13 +80,15 @@ def fetch_save_event(event):
     # check if event exists in Salesforce
     event_dj = get_object_or_None(Campaign, nb_id=event['id'])
 
+    # fetch creator user nb_id from Nationbuilder via author_id in event obj
+    if event['author_id'] is None:
+        return False
+    creator = nb_backends.fetch_user(event['author_id']).json()
+    user_language = determine_user_language(creator)
+    country_code = determine_country_code(creator)
+
     if not event_dj:
-        # fetch creator user nb_id from Nationbuilder via author_id in event obj
-        if event['author_id'] is None:
-            return False
-        creator = nb_backends.fetch_user(event['author_id']).json()
-        user_language = determine_user_language(creator)
-        country_code = determine_country_code(creator)
+
 
         # create or update creator user fb_id from Salesforce via email from event obj
         try:
@@ -97,8 +99,9 @@ def fetch_save_event(event):
                 'MailingCountryCode': country_code,
                 'Email_Language__c': user_language,
                 'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG,  # advocacy record type
-
-                'Sub_Maker_party__c': True
+                'Subscriber__c': creator['person']['email_opt_in'],
+                'Sub_Maker_Party__c': creator['person']['email_opt_in'],
+                'Signup_Source_URL__c': 'makerparty.community',
             })
         except:
             return False
@@ -108,8 +111,10 @@ def fetch_save_event(event):
             'Name': event['name'],
             'Type': 'Event',
             'Location__c': insert_address(event),
-            'parentId': settings.EVENT_PARENT_ID
+            'ParentId': settings.EVENT_PARENT_ID,
+            'IsActive': True
         }
+
         try:
             sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
             event_nb = nb_backends.fetch_event(event['id']).json()
@@ -127,6 +132,16 @@ def fetch_save_event(event):
                 active=True,
             )
             event_dj_obj.save()
+
+            # insert creator to CampaignMember and set them as "Host"
+            sf_backends.upsert_contact_to_campaign({
+                'ContactId': creator_sf_id['id'],
+                'CampaignId': sf_campaign_id['id'],
+                'Campaign_Language__c': user_language,
+                'Campaign_Member_Type__c': "Host",
+                'Attended_Before__c': 'no',
+            })
+
         except:
             return False
     else:
@@ -140,9 +155,18 @@ def fetch_save_event(event):
                 'Name': event['name'],
                 'Type': 'Event',
                 'Location__c': insert_address(event),
-                'parentId': settings.EVENT_PARENT_ID
+                'ParentId': settings.EVENT_PARENT_ID,
+                'IsActive': True
             }
             sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
+
+            sf_backends.upsert_contact_to_campaign({
+                'ContactId': event_dj.creator_sf_id,
+                'CampaignId': sf_campaign_id['id'],
+                'Campaign_Language__c': user_language,
+                'Campaign_Member_Type__c': "Host",
+                'Attended_Before__c': 'no',
+            })
 
             event_dj_obj = {
                 'name': event_nb['event']['name'],
@@ -211,8 +235,10 @@ def compare_nb_dj_member_list(nb_list):
                     'Email': user_details['person']['email'],
                     'MailingCountryCode': country_code,
                     'Email_Language__c': user_language,
-                    'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG  # advocacy record type
-                    # 'Campaign_Email_Opt_In__c': user_details['person']['email_opt_in']
+                    'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG,  # advocacy record type
+                    'Subscriber__c': user_details['person']['email_opt_in'],
+                    'Sub_Maker_Party__c': user_details['person']['email_opt_in'],
+                    'Signup_Source_URL__c': 'makerparty.community',
                 })
             except:
                 continue
