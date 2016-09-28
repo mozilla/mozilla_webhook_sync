@@ -240,7 +240,7 @@ def compare_nb_dj_member_list(nb_list):
 def remove_campaign(nb_id):
     campaign = Campaign.objects.get(nb_id=nb_id)
     sf_backends.delete_campaign(campaign.sf_id)
-    return Campaign.objects.filter(nb_id=nb_id).update(active=False)
+    return Campaign.objects.filter(nb_id=nb_id).update(active=False, sync_time=timezone.now())
 
 
 def determine_country_code(nb_person_obj):
