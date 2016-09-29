@@ -5,11 +5,12 @@ import re
 
 
 def get_sf_session():
-    session = requests.Session()
     print 'test'
     print settings.SF_USERNAME_STG
     print settings.SF_PASSWORD_STG
     print settings.SF_TOKEN_STG
+    session = requests.Session()
+
     return Salesforce(username=settings.SF_USERNAME_STG,
                       password=settings.SF_PASSWORD_STG,
                       security_token=settings.SF_TOKEN_STG,
