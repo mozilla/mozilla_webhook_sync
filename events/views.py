@@ -140,6 +140,7 @@ def fetch_save_event(event):
                 'Campaign_Language__c': user_language,
                 'Campaign_Member_Type__c': "Host",
                 'Attended_Before__c': 'no',
+                'Campaign_Email_opt_in__c': creator['person']['email_opt_in'],
             })
 
         except:
@@ -166,6 +167,7 @@ def fetch_save_event(event):
                 'Campaign_Language__c': user_language,
                 'Campaign_Member_Type__c': "Host",
                 'Attended_Before__c': 'no',
+                'Campaign_Email_opt_in__c': creator['person']['email_opt_in'],
             })
 
             event_dj_obj = {
@@ -258,6 +260,7 @@ def compare_nb_dj_member_list(nb_list):
                     'Campaign_Language__c': user_details['person']['user_language'],
                     'Campaign_Member_Type__c': "Attendee",
                     'Attended_Before__c': 'no',
+                    'Campaign_Email_opt_in__c': user_details['person']['email_opt_in'],
                 })
             except:
                 continue
