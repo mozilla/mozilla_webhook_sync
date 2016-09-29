@@ -7,8 +7,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Begin syncing")
-        print(settings.SF_USERNAME_STG)
-        
+
         event_list = nb_backends.fetch_events().json()
 
         for event in event_list['results']:
