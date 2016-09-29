@@ -3,6 +3,7 @@ import requests
 from django.conf import settings
 import re
 
+
 def get_sf_session():
     session = requests.Session()
     return Salesforce(username=settings.SF_USERNAME_STG,

@@ -1,11 +1,13 @@
 from django.core.management.base import BaseCommand
 from events.sync import *
+from django.conf import settings
 
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Begin syncing")
+        print(settings.SF_USERNAME_STG)
         
         event_list = nb_backends.fetch_events().json()
 
