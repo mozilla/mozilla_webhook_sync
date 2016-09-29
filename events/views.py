@@ -42,16 +42,11 @@ def run(request):
             return Http404('not found')
 
     event_list = nb_backends.fetch_events().json()
-    count = 0
-    for event in event_list['results']:
-        # max five campaigns at a time, due to Heroku timeout limit
-        if count == 5:
-            return HttpResponse('done')
 
+    for event in event_list['results']:
         event_dj = fetch_save_event(event)
         if event_dj is not False:
             record_campaign_members(event['id'])
-        count += 1
 
     campaigns = Campaign.objects.all()
 
