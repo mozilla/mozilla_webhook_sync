@@ -3,10 +3,10 @@ from models import *
 from annoying.functions import get_object_or_None
 from django.utils import timezone
 from django.conf import settings
+import unicodedata
 
 
 def fetch_save_event(event):
-    print event
     """
     Fetch events from Nationbuilder (with heroku schedular syncing every 10 minutes because webhook does not provide it
 
@@ -55,8 +55,9 @@ def fetch_save_event(event):
             'IsActive': True
         }
         print event_sf_obj
+        sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
         try:
-            sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
+            # sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
             event_nb = nb_backends.fetch_event(event['id']).json()
 
             # save obj to DJ Campaign table
