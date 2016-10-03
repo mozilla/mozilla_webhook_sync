@@ -6,6 +6,7 @@ from django.conf import settings
 
 
 def fetch_save_event(event):
+    print event
     """
     Fetch events from Nationbuilder (with heroku schedular syncing every 10 minutes because webhook does not provide it
 
@@ -60,7 +61,7 @@ def fetch_save_event(event):
 
             # save obj to DJ Campaign table
             event_dj_obj = Campaign(
-                name=unicode(event['name']),
+                name=event['name'],
                 start_time=event['start_time'],
                 nb_id=event['id'],
                 sf_id=sf_campaign_id['id'],
@@ -93,7 +94,7 @@ def fetch_save_event(event):
         event_nb = nb_backends.fetch_event(event_dj.nb_id).json()
         if event_nb != event:
             event_sf_obj = {
-                'Name': unicode(event['name']),
+                'Name': event['name'],
                 'Type': 'Event',
                 'Location__c': insert_address(event),
                 'ParentId': settings.EVENT_PARENT_ID,
