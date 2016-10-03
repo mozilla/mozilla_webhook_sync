@@ -7,10 +7,15 @@ import re
 def get_sf_session():
     session = requests.Session()
 
+    if settings.SF_SANDBOX_STG == 'true':
+        sandbox = True
+    else:
+        sandbox = False
+
     return Salesforce(username=settings.SF_USERNAME_STG,
                       password=settings.SF_PASSWORD_STG,
                       security_token=settings.SF_TOKEN_STG,
-                      sandbox=False,
+                      sandbox=sandbox,
                       session=session,
                       )
 

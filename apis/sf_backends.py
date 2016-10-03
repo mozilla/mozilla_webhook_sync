@@ -6,6 +6,12 @@ import re
 
 def get_sf_session():
     session = requests.Session()
+
+    if settings.SF_SANDBOX_STG == 'true':
+        sandbox = True
+    else:
+        sandbox = False
+
     return Salesforce(username=settings.SF_USERNAME,
                       password=settings.SF_PASSWORD,
                       security_token=settings.SF_TOKEN,
@@ -55,13 +61,13 @@ def fetch_campaign(object_id):
 
 def fetch_campaign_by_name(name):
     sf = get_sf_session()
-    query = "select id from Campaign where Name = '{0}'".format(re.escape(name))
+    query = "select id from Campaign where Name = '{0}'".format(re.sub(r"([\'])", r'\\\1', name))
     return sf.query_all(query)
 
 
 def insert_campaign(object):
     sf = get_sf_session()
-    query = "select Id from Campaign where Name = '{0}'".format(re.escape(object['Name']))
+    query = "select id from Campaign where Name = '{0}'".format(re.sub(r"([\'])", r'\\\1', object['Name']))
     results = sf.query_all(query)
     try:
         object_id = results['records'][0]['Id']
@@ -75,12 +81,20 @@ def insert_campaign(object):
         return sf.Campaign.create(object)
 
 
+def delete_campaign(object_id):
+    sf = get_sf_session()
+    try:
+        return sf.Campaign.delete(object_id)
+    except:
+        return False
+
+
 def upsert_contact_to_campaign(object):
     sf = get_sf_session()
 
     # search for existing user
     query = "select id from CampaignMember where ContactId = '{0}' " \
-            "and CampaignId = '{1}'".format(object['ContactId'], re.escape(object['CampaignId']))
+            "and CampaignId = '{1}'".format(object['ContactId'], re.sub(r"([\'])", r'\\\1', object['CampaignId']))
     results = sf.query_all(query)
     try:
         object_id = results['records'][0]['Id']
@@ -104,7 +118,7 @@ def fetch_campaign_member(object_id):
 def upsert_campaign(object):
     sf = get_sf_session()
 
-    query = "select id from Campaign where Name = '{0'".format(re.escape(object['Name']))
+    query = "select id from Campaign where Name = '{0}'".format(re.sub(r"([\'])", r'\\\1', object['Name']))
     results = sf.query_all(query)
 
     try:

@@ -44,6 +44,8 @@ that will POST the user information to the Django webhook module.
 
 For Person created, there is a bug in Nationbuilder that is setting two to three POSTs to the webhook, only the one with user_language that is not null that should be use, we are ignoring the other POSTs as they will create duplicated information in Salesforce.
 
+The webhook app is "nb_hook", and the main file is views.py
+
 Currently, these are the user fields from Nationbuilder that are pushed to the webhook, and synced into Salesforce via Force API::
 
         'SALESFORCE FIELD NAME':     'NATIONBUILDER FIELD NAME'
@@ -80,3 +82,27 @@ For debugging purpose, we have a database table for storing all records. It incl
 Nationbuilder Webhooks -- Update User
 _____________________
 The update user protocol utilizes database table. The data is stored in a local database, via /update, and in Heroku it is using the Scheduler to sync the updated users to Salesforce in batches, via /save_update. Once it is updated, it will check the "synced" field from False to True.
+
+
+Maker Party Events -- Custom Django Command
+---------------------
+Maker Event is using a different method to sync the data into Salesforce, as Nationbuilder does not provide webhook support for event creation or update. In order to sync we will have to do a pull from Nationbuilder API and send it to Salesforce manually. We are using a Heroku scheduler to run the sync command every 10 minutes.
+
+The Maker Party app is "events", and the main sync command is in management/commands/sync_events_to_salesforce.py. Make sure in heroku scheduler you have to add the --settings=settings.prod parameter as well. The command should be::
+
+    python manage.py sync_events_to_salesforce --settings=settings.prod
+
+
+Maker Party Events -- Nationbuilder API -> sync module -> Salesforce API
+---------------------
+The sync module will send request to Nationbuilder to get a full list of events, save it in the sync module for fast referencing, and send the events to Salesforce. If an event is identical from the previous sync, or has been sync'ed in less than 30 minutes, the sync module will skip it.
+
+Here are the fields that are sync'ed into Salesforce::
+
+    Campaign
+            'Name': event['name'],
+            'Type': 'Event',
+            'Location__c': insert_address(event),
+            'ParentId': settings.EVENT_PARENT_ID,
+            'IsActive': True
+

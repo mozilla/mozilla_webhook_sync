@@ -29,8 +29,6 @@ def fetch_save_event(event):
     country_code = determine_country_code(creator)
 
     if not event_dj:
-
-
         # create or update creator user fb_id from Salesforce via email from event obj
         try:
             creator_sf_id = sf_backends.insert_user({
