@@ -83,6 +83,7 @@ def fetch_save_event(event):
             })
 
         except:
+            print 'error'
             return False
     else:
         # if event was updated less than 30 minutes ago, skip it
@@ -268,7 +269,6 @@ def insert_address(obj):
         pass
     address = address.strip()
     address = address.strip(',')
-    print address
     return address
 
 
