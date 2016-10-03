@@ -52,12 +52,12 @@ def fetch_save_event(event):
             'Type': 'Event',
             'Location__c': insert_address(event),
             'ParentId': settings.EVENT_PARENT_ID,
-            'IsActive': True
+            'IsActive': True,
+            'Nationbuilder_id__c': event['id'],
         }
-        print event_sf_obj
-        sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
+
         try:
-            # sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
+            sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
             event_nb = nb_backends.fetch_event(event['id']).json()
 
             # save obj to DJ Campaign table
@@ -73,6 +73,8 @@ def fetch_save_event(event):
                 active=True,
             )
             event_dj_obj.save()
+
+            nb_backends.save_event_sf_id(event['id'], sf_campaign_id['id'])
 
             # insert creator to CampaignMember and set them as "Host"
             sf_backends.upsert_contact_to_campaign({
@@ -99,7 +101,8 @@ def fetch_save_event(event):
                 'Type': 'Event',
                 'Location__c': insert_address(event),
                 'ParentId': settings.EVENT_PARENT_ID,
-                'IsActive': True
+                'IsActive': True,
+                'Nationbuilder_id__c': event['id'],
             }
             sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
 
