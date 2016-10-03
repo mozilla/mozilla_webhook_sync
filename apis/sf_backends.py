@@ -7,7 +7,7 @@ import re
 def get_sf_session():
     session = requests.Session()
 
-    if settings.SF_SANDBOX_STG == 'true':
+    if settings.SF_SANDBOX == 'true':
         sandbox = True
     else:
         sandbox = False
