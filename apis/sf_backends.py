@@ -69,6 +69,8 @@ def insert_campaign(object):
     sf = get_sf_session()
     query = "select id from Campaign where Name = '{0}'".format(re.sub(r"([\'])", r'\\\1', object['Name']))
     results = sf.query_all(query)
+    print query
+    print results
     try:
         object_id = results['records'][0]['Id']
     except:
