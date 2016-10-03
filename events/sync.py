@@ -219,7 +219,7 @@ def determine_country_code(nb_person_obj):
         else:
             country_code = nb_person_obj['person']['primary_address']['country_code']
     except:
-        country_code = ''
+        country_code = None
 
     return country_code
 
