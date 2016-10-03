@@ -53,7 +53,7 @@ def fetch_save_event(event):
             'ParentId': settings.EVENT_PARENT_ID,
             'IsActive': True
         }
-
+        print event_sf_obj
         try:
             sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
             event_nb = nb_backends.fetch_event(event['id']).json()
