@@ -1,6 +1,6 @@
 from django.http import HttpResponse, Http404
 from . import models, misc
-from apis import sf_backends_staging as sf_backends
+from apis import sf_backends
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.conf import settings

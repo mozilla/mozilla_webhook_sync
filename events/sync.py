@@ -1,4 +1,4 @@
-from apis import nb_backends, sf_backends_staging as sf_backends
+from apis import nb_backends, sf_backends
 from models import *
 from annoying.functions import get_object_or_None
 from django.utils import timezone
