@@ -56,39 +56,39 @@ def fetch_save_event(event):
             'Nationbuilder_id__c': event['id'],
         }
 
-        try:
-            sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
-            event_nb = nb_backends.fetch_event(event['id']).json()
+        # try:
+        sf_campaign_id = sf_backends.insert_campaign(event_sf_obj)
+        event_nb = nb_backends.fetch_event(event['id']).json()
 
-            # save obj to DJ Campaign table
-            event_dj_obj = Campaign(
-                name=event['name'],
-                start_time=event['start_time'],
-                nb_id=event['id'],
-                sf_id=sf_campaign_id['id'],
-                type='Event',
-                creator_sf_id=creator_sf_id['id'],
-                content=event_nb['event'],
-                parent_id=settings.EVENT_PARENT_ID,
-                active=True,
-            )
-            event_dj_obj.save()
+        # save obj to DJ Campaign table
+        event_dj_obj = Campaign(
+            name=event['name'],
+            start_time=event['start_time'],
+            nb_id=event['id'],
+            sf_id=sf_campaign_id['id'],
+            type='Event',
+            creator_sf_id=creator_sf_id['id'],
+            content=event_nb['event'],
+            parent_id=settings.EVENT_PARENT_ID,
+            active=True,
+        )
+        event_dj_obj.save()
 
-            nb_backends.save_event_sf_id(event['id'], sf_campaign_id['id'])
+        nb_backends.save_event_sf_id(event['id'], sf_campaign_id['id'])
 
-            # insert creator to CampaignMember and set them as "Host"
-            sf_backends.upsert_contact_to_campaign({
-                'ContactId': creator_sf_id['id'],
-                'CampaignId': sf_campaign_id['id'],
-                'Campaign_Language__c': user_language,
-                'Campaign_Member_Type__c': "Host",
-                'Attended_Before__c': 'no',
-                'Campaign_Email_opt_in__c': creator['person']['email_opt_in'],
-            })
+        # insert creator to CampaignMember and set them as "Host"
+        sf_backends.upsert_contact_to_campaign({
+            'ContactId': creator_sf_id['id'],
+            'CampaignId': sf_campaign_id['id'],
+            'Campaign_Language__c': user_language,
+            'Campaign_Member_Type__c': "Host",
+            'Attended_Before__c': 'no',
+            'Campaign_Email_opt_in__c': creator['person']['email_opt_in'],
+        })
 
-        except:
-            print 'error'
-            return False
+        # except:
+        #     print 'error'
+        #     return False
     else:
         # if event was updated less than 30 minutes ago, skip it
         if event_dj.sync_time > timezone.now() - timezone.timedelta(minutes=30):
