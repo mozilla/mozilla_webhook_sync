@@ -32,8 +32,8 @@ def fetch_save_event(event):
         # create or update creator user fb_id from Salesforce via email from event obj
         try:
             creator_sf_id = sf_backends.insert_user({
-                'FirstName': creator['person']['first_name'],
-                'LastName': creator['person']['last_name'],
+                'FirstName': unicode(creator['person']['first_name']),
+                'LastName': unicode(creator['person']['last_name']),
                 'Email': creator['person']['email'],
                 'MailingCountryCode': country_code,
                 'Email_Language__c': user_language,
@@ -47,7 +47,7 @@ def fetch_save_event(event):
 
         # insert campaign to SF and get the sf_campaign_id
         event_sf_obj = {
-            'Name': event['name'],
+            'Name': unicode(event['name']),
             'Type': 'Event',
             'Location__c': insert_address(event),
             'ParentId': settings.EVENT_PARENT_ID,
@@ -93,7 +93,7 @@ def fetch_save_event(event):
         event_nb = nb_backends.fetch_event(event_dj.nb_id).json()
         if event_nb != event:
             event_sf_obj = {
-                'Name': event['name'],
+                'Name': unicode(event['name']),
                 'Type': 'Event',
                 'Location__c': insert_address(event),
                 'ParentId': settings.EVENT_PARENT_ID,
@@ -229,42 +229,42 @@ def insert_address(obj):
     if 'venue' not in obj:
         return ''
     else:
-        nb_address = obj['venue']['address']
+        nb_address = unicode(obj['venue']['address'])
 
     address = ''
     if 'name' in obj['venue']:
         try:
-            address = obj['venue']['name'] + ', '
+            address = unicode(obj['venue']['name'] + ', ')
         except:
             pass
     try:
         if nb_address['address1'] != "":
-            address = address + nb_address['address1'] + ', '
+            address = unicode(address + nb_address['address1'] + ', ')
     except:
         pass
     try:
         if nb_address['address2'] != "":
-            address = address + nb_address['address2'] + ', '
+            address = unicode(address + nb_address['address2'] + ', ')
     except:
         pass
     try:
         if nb_address['city'] != "":
-            address = address + nb_address['city'] + ', '
+            address = unicode(address + nb_address['city'] + ', ')
     except:
         pass
     try:
         if nb_address['state'] != "":
-            address = address + nb_address['state'] + ', '
+            address = unicode(address + nb_address['state'] + ', ')
     except:
         pass
     try:
         if nb_address['zip'] != "":
-            address = address + nb_address['zip'] + ', '
+            address = unicode(address + nb_address['zip'] + ', ')
     except:
         pass
     try:
         if nb_address['country_code'] != "":
-            address = address + nb_address['country_code']
+            address = unicode(address + nb_address['country_code'])
     except:
         pass
     address = address.strip()
