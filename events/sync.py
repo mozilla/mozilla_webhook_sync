@@ -43,7 +43,6 @@ def fetch_save_event(event):
                 'Signup_Source_URL__c': 'makerparty.community',
             })
         except:
-            print 'error'
             return False
 
         # insert campaign to SF and get the sf_campaign_id
@@ -216,12 +215,11 @@ def determine_country_code(nb_person_obj):
     try:
         if nb_person_obj['person']['primary_address']['country_code'] == 'Other' or \
                         nb_person_obj['person']['primary_address']['country_code'] == 'other':
-            country_code = None
+            country_code = ''
         else:
             country_code = nb_person_obj['person']['primary_address']['country_code']
     except:
-        print 'country_code error'
-        country_code = None
+        country_code = ''
 
     return country_code
 
@@ -270,6 +268,7 @@ def insert_address(obj):
         pass
     address = address.strip()
     address = address.strip(',')
+    print address
     return address
 
 
