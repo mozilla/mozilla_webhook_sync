@@ -60,7 +60,7 @@ def fetch_save_event(event):
 
             # save obj to DJ Campaign table
             event_dj_obj = Campaign(
-                name=event['name'],
+                name=unicode(event['name']),
                 start_time=event['start_time'],
                 nb_id=event['id'],
                 sf_id=sf_campaign_id['id'],
