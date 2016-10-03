@@ -37,7 +37,7 @@ def fetch_save_event(event):
                 'Email': creator['person']['email'],
                 'MailingCountryCode': country_code,
                 'Email_Language__c': user_language,
-                'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG,  # advocacy record type
+                'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID,  # advocacy record type
                 'Subscriber__c': creator['person']['email_opt_in'],
                 'Sub_Maker_Party__c': creator['person']['email_opt_in'],
                 'Signup_Source_URL__c': 'makerparty.community',
@@ -176,7 +176,7 @@ def compare_nb_dj_member_list(nb_list):
                     'Email': user_details['person']['email'],
                     'MailingCountryCode': country_code,
                     'Email_Language__c': user_language,
-                    'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG,  # advocacy record type
+                    'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID,  # advocacy record type
                     'Subscriber__c': user_details['person']['email_opt_in'],
                     'Sub_Maker_Party__c': user_details['person']['email_opt_in'],
                     'Signup_Source_URL__c': 'makerparty.community',
