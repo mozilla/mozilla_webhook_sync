@@ -32,8 +32,8 @@ def fetch_save_event(event):
         # create or update creator user fb_id from Salesforce via email from event obj
         try:
             creator_sf_id = sf_backends.insert_user({
-                'FirstName': unicode(creator['person']['first_name']),
-                'LastName': unicode(creator['person']['last_name']),
+                'FirstName': creator['person']['first_name'],
+                'LastName': creator['person']['last_name'],
                 'Email': creator['person']['email'],
                 'MailingCountryCode': country_code,
                 'Email_Language__c': user_language,
