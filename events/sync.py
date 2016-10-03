@@ -47,7 +47,7 @@ def fetch_save_event(event):
 
         # insert campaign to SF and get the sf_campaign_id
         event_sf_obj = {
-            'Name': unicode(event['name']),
+            'Name': event['name'],
             'Type': 'Event',
             'Location__c': insert_address(event),
             'ParentId': settings.EVENT_PARENT_ID,
@@ -229,42 +229,42 @@ def insert_address(obj):
     if 'venue' not in obj:
         return ''
     else:
-        nb_address = unicode(obj['venue']['address'])
+        nb_address = (obj['venue']['address'])
 
     address = ''
     if 'name' in obj['venue']:
         try:
-            address = unicode(obj['venue']['name'] + ', ')
+            address = (obj['venue']['name'] + ', ')
         except:
             pass
     try:
         if nb_address['address1'] != "":
-            address = unicode(address + nb_address['address1'] + ', ')
+            address = (address + nb_address['address1'] + ', ')
     except:
         pass
     try:
         if nb_address['address2'] != "":
-            address = unicode(address + nb_address['address2'] + ', ')
+            address = (address + nb_address['address2'] + ', ')
     except:
         pass
     try:
         if nb_address['city'] != "":
-            address = unicode(address + nb_address['city'] + ', ')
+            address = (address + nb_address['city'] + ', ')
     except:
         pass
     try:
         if nb_address['state'] != "":
-            address = unicode(address + nb_address['state'] + ', ')
+            address = (address + nb_address['state'] + ', ')
     except:
         pass
     try:
         if nb_address['zip'] != "":
-            address = unicode(address + nb_address['zip'] + ', ')
+            address = (address + nb_address['zip'] + ', ')
     except:
         pass
     try:
         if nb_address['country_code'] != "":
-            address = unicode(address + nb_address['country_code'])
+            address = (address + nb_address['country_code'])
     except:
         pass
     address = address.strip()
