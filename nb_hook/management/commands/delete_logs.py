@@ -7,7 +7,7 @@ class Command(BaseCommand):
         print("Removing old logs more than 48 hours ago...")
 
         date_from = datetime.now() - timedelta(days=2)
-        old_logs = Log.objects.filter(created_at___lte=date_from)
+        old_logs = Log.objects.filter(created_at__lte=date_from)
 
         for log in old_logs:
             print log.created_at
