@@ -87,7 +87,6 @@ def fetch_save_event(event):
             })
 
         except:
-            print 'error'
             return False
     else:
         # if event was updated less than 30 minutes ago, skip it
@@ -278,7 +277,10 @@ def insert_address(obj):
 
 
 def determine_user_language(nb_person_obj):
-    if 'user_language' not in nb_person_obj['person'] or nb_person_obj['person']['user_language'] is None:
+    if 'user_language' not in nb_person_obj['person'] \
+            or nb_person_obj['person']['user_language'] is None or nb_person_obj['person']['user_language']:
+        return 'EN'
+    elif nb_person_obj['person']['user_language'].lower() == 'en-gb':
         return 'EN'
     else:
         return nb_person_obj['person']['user_language']
