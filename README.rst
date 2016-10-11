@@ -95,7 +95,7 @@ The Maker Party app is "events", and the main sync command is in management/comm
 
 Maker Party Events -- Nationbuilder API -> sync module -> Salesforce API
 ---------------------
-The sync module will send request to Nationbuilder to get a full list of events, save it in the sync module for fast referencing, and send the events to Salesforce. If an event is identical from the previous sync, or has been sync'ed in less than 30 minutes, the sync module will skip it.
+The sync module will send request to Nationbuilder to get a full list of events, save it in the sync module for fast referencing, and send the events to Salesforce. If an event is identical from the previous sync, or has been sync'ed in less than 60 minutes, the sync module will skip it. Currently, the sync occurs hourly.
 
 Here are the fields that are sync'ed into Salesforce::
 
@@ -106,3 +106,21 @@ Here are the fields that are sync'ed into Salesforce::
             'ParentId': settings.EVENT_PARENT_ID,
             'IsActive': True
 
+    CampaignMember
+            'ContactId': sf_contact_id['id'],
+            'CampaignId': event_dj.sf_id,
+            'Campaign_Language__c': user_details['person']['user_language'],
+            'Campaign_Member_Type__c': "Attendee",
+            'Attended_Before__c': 'no',
+            'Campaign_Email_opt_in__c': user_details['person']['email_opt_in'],
+
+    Contact
+            'FirstName': user_details['person']['first_name'],
+            'LastName': user_details['person']['last_name'],
+            'Email': user_details['person']['email'],
+            'MailingCountryCode': country_code,
+            'Email_Language__c': user_language,
+            'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID_STG,  # advocacy record type
+            'Subscriber__c': user_details['person']['email_opt_in'],
+            'Sub_Maker_Party__c': user_details['person']['email_opt_in'],
+            'Signup_Source_URL__c': 'makerparty.community',
