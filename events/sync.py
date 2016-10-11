@@ -110,7 +110,7 @@ def fetch_save_event(event):
                 'CampaignId': sf_campaign_id['id'],
                 'Campaign_Language__c': user_language,
                 'Campaign_Member_Type__c': "Host",
-                'Attended_Before__c': 'no',
+                # 'Attended_Before__c': 'no',
                 'Campaign_Email_opt_in__c': creator['person']['email_opt_in'],
             })
 
@@ -203,7 +203,7 @@ def compare_nb_dj_member_list(nb_list):
                     'CampaignId': event_dj.sf_id,
                     'Campaign_Language__c': user_details['person']['user_language'],
                     'Campaign_Member_Type__c': "Attendee",
-                    'Attended_Before__c': 'no',
+                    # 'Attended_Before__c': 'no',
                     'Campaign_Email_opt_in__c': user_details['person']['email_opt_in'],
                 })
             except:

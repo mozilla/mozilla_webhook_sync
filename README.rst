@@ -111,7 +111,6 @@ Here are the fields that are sync'ed into Salesforce::
             'CampaignId': event_dj.sf_id,
             'Campaign_Language__c': user_details['person']['user_language'],
             'Campaign_Member_Type__c': "Attendee",
-            'Attended_Before__c': 'no',
             'Campaign_Email_opt_in__c': user_details['person']['email_opt_in'],
 
     Contact
