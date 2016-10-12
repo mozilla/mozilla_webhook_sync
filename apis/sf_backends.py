@@ -40,6 +40,7 @@ def insert_user(object):
     try:
         object_id = results['records'][0]['Id']
         print 'heres the stuff'
+        print object_id
     except:
         object_id = None
 
