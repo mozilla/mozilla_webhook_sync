@@ -196,15 +196,12 @@ def compare_nb_dj_member_list(nb_list):
                 attended_before=False,
                 campaign_language=user_language
             )
-            print nb_member['person_id']
-            print nb_member['event_id']
-            print 'saved'
             obj.save()
             try:
                 sf_backends.upsert_contact_to_campaign({
                     'ContactId': sf_contact_id['id'],
                     'CampaignId': event_dj.sf_id,
-                    'Campaign_Language__c': determine_user_language,
+                    'Campaign_Language__c': user_language,
                     'Campaign_Member_Type__c': "Attendee",
                     # 'Attended_Before__c': 'no',
                     'Campaign_Email_opt_in__c': user_details['person']['email_opt_in'],
