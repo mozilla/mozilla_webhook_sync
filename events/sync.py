@@ -297,4 +297,5 @@ def determine_user_language(nb_person_obj):
     elif nb_person_obj['person']['user_language'].lower() == 'en-gb':
         return 'EN'
     else:
-        return nb_person_obj['person']['user_language']
+        lang = nb_person_obj['person']['user_language']
+        return lang.upper()
