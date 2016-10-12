@@ -278,7 +278,7 @@ def insert_address(obj):
 
 def determine_user_language(nb_person_obj):
     if 'user_language' not in nb_person_obj['person'] \
-            or nb_person_obj['person']['user_language'] is None or nb_person_obj['person']['user_language']:
+            or nb_person_obj['person']['user_language'] is None or len(nb_person_obj['person']['user_language']) == 2:
         return 'EN'
     elif nb_person_obj['person']['user_language'].lower() == 'en-gb':
         return 'EN'
