@@ -167,6 +167,8 @@ def record_campaign_members(event_nb_id):
 
 def compare_nb_dj_member_list(nb_list):
     for nb_member in nb_list:
+        print nb_member['person_id']
+        print nb_member['event_id']
         if not CampaignMember.objects.filter(member_nb_id=nb_member['person_id'], campaign_id_id=nb_member['event_id']).exists():
             user_details = nb_backends.fetch_user(nb_member['person_id']).json()
             event_dj = get_object_or_None(Campaign, nb_id=nb_member['event_id'])
