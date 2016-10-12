@@ -207,6 +207,9 @@ def compare_nb_dj_member_list(nb_list):
                     'Campaign_Email_opt_in__c': user_details['person']['email_opt_in'],
                 })
             except:
+                print 'error'
+                print nb_member['person_id']
+                print nb_member['event_id']
                 continue
 
 
