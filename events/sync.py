@@ -180,6 +180,7 @@ def compare_nb_dj_member_list(nb_list):
             user_language = determine_user_language(user_details)
             country_code = determine_country_code(user_details)
             print user_language
+            print country_code
             try:
                 sf_contact_id = sf_backends.insert_user({
                     'FirstName': user_details['person']['first_name'],
