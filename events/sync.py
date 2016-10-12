@@ -179,7 +179,7 @@ def compare_nb_dj_member_list(nb_list):
 
             user_language = determine_user_language(user_details)
             country_code = determine_country_code(user_details)
-
+            print user_language
             try:
                 sf_contact_id = sf_backends.insert_user({
                     'FirstName': user_details['person']['first_name'],
@@ -194,7 +194,8 @@ def compare_nb_dj_member_list(nb_list):
                 })
             except:
                 continue
-
+            print 'still here'
+            print sf_contact_id['id']
             obj = CampaignMember(
                 campaign_id=event_dj,
                 member_sf_id=sf_contact_id['id'],
@@ -202,6 +203,7 @@ def compare_nb_dj_member_list(nb_list):
                 attended_before=False,
                 campaign_language=user_language
             )
+            print obj
             obj.save()
             try:
                 sf_backends.upsert_contact_to_campaign({
