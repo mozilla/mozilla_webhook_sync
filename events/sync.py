@@ -194,6 +194,8 @@ def compare_nb_dj_member_list(nb_list):
                     'Signup_Source_URL__c': 'makerparty.community',
                 })
             except:
+                print 'error'
+                print settings.ADVOCACY_RECORD_TYPE_ID
                 continue
             print 'still here'
             print sf_contact_id['id']
