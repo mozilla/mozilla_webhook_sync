@@ -45,7 +45,7 @@ def insert_user(object):
         object_id = None
 
     if object_id is not None:
-        sf.Contact.update(object_id, object)
+        print sf.Contact.update(object_id, object)
         print 'heres the stuff again'
         print object_id
         return {'id': object_id}
