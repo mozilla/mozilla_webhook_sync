@@ -169,8 +169,9 @@ def compare_nb_dj_member_list(nb_list):
     for nb_member in nb_list:
         print nb_member['person_id']
         print nb_member['event_id']
-        if CampaignMember.objects.filter(member_nb_id=int(nb_member['person_id']),
-                                             campaign_id_id=int(nb_member['event_id'])).exists():
+        campaign = Campaign.objects.get(nb_id=nb_member['event_id'])
+        if CampaignMember.objects.filter(member_nb_id=nb_member['person_id'],
+                                         campaign_id=campaign).exists():
             print 'exist'
         else:
             print 'not exist'
