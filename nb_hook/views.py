@@ -27,8 +27,7 @@ def create_hook(request):
 
         misc.check_nb_token(content)
 
-        for tag in content['payload']['person']['tags']:
-            save_user(content, tag, 'created')
+        save_user(content, 'created')
 
     raise Http404("Not found")
 
@@ -52,13 +51,12 @@ def update_hook(request):
 
         misc.check_nb_token(content)
 
-        for tag in content['payload']['person']['tags']:
-            save_user(content, tag, 'updated')
+        save_user(content, 'updated')
 
     raise Http404("Not found")
 
 
-def save_user(content, campaign_name, post_type):
+def save_user(content, post_type):
     """
     Receive POST signal from Nationbuilder user created webhook and add to Salesforce via send_to_sf method
 
@@ -93,7 +91,7 @@ def save_user(content, campaign_name, post_type):
 
     if matching_contacts:
         pass
-        # db_contact = models.ContactSync.objects.get(email=content['payload']['person']['email'])
+    else:
         db_contact = models.ContactSync(email=content['payload']['person']['email'],
                                         contact=content,
                                         type=post_type)
