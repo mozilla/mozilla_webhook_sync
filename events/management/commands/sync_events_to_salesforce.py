@@ -8,7 +8,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print("Check API upper limit")
         if not check_count():
+            print check_count()
+            print('quit')
             return
+        else:
+            print check_count()
+            print('continue')
 
         print("Begin syncing")
 

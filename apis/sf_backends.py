@@ -23,8 +23,6 @@ def check_count():
         counter = Counter()
         counter.save()
 
-    print counter.counter
-    print settings.SF_API_COUNTER_LIMIT
     if counter.counter < settings.SF_API_COUNTER_LIMIT:
         return True
     else:
