@@ -22,9 +22,10 @@ def check_count():
     except Counter.DoesNotExist:
         counter = Counter()
         counter.save()
-        
-    if counter.counter < settings.SF_API_COUNTER_LIMIT:
 
+    print counter.counter
+    print settings.SF_API_COUNTER_LIMIT
+    if counter.counter < settings.SF_API_COUNTER_LIMIT:
         return True
     else:
         return False
