@@ -20,6 +20,7 @@ class Command(BaseCommand):
         # sync them to salesforce
         for contact in contact_list:
             print("----------")
+            print(contact)
             person = contact.contact['payload']['person']
             print(person['email'])
             contact_obj = {
