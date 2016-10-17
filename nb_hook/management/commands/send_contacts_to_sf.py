@@ -28,7 +28,7 @@ class Command(BaseCommand):
                 'Email': person['email'],
                 'MailingCountryCode': determine_country_code(contact['payload']),
                 'Email_Language__c': determine_user_language(contact['payload']),
-                'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID  # advocacy record type
+                'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID,  # advocacy record type
                 'Signup_Source_URL__c': 'changecopyright.org',
             }
             sf_contact_id = sf_backends.insert_user(contact_obj)
