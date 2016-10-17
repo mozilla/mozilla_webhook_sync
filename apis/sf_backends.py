@@ -1,10 +1,42 @@
 from simple_salesforce import Salesforce
+from apis.models import Counter
 import requests
 from django.conf import settings
 import re
 
 
+def add_count():
+    try:
+        counter = Counter.objects.latest('last_updated')
+    except Counter.DoesNotExist:
+        counter = Counter()
+        counter.save()
+
+    counter.counter += 1
+    counter.save()
+
+
+def check_count():
+    try:
+        counter = Counter.objects.latest('last_updated')
+    except Counter.DoesNotExist:
+        counter = Counter()
+        counter.save()
+        
+    if counter.counter < settings.SF_API_COUNTER_LIMIT:
+
+        return True
+    else:
+        return False
+
+
+def reset_counter():
+    new_counter = Counter()
+    new_counter.save()
+
+
 def get_sf_session():
+    check_count()
     session = requests.Session()
 
     if settings.SF_SANDBOX == 'true':
@@ -12,6 +44,7 @@ def get_sf_session():
     else:
         sandbox = False
 
+    add_count()
     return Salesforce(username=settings.SF_USERNAME,
                       password=settings.SF_PASSWORD,
                       security_token=settings.SF_TOKEN,
@@ -39,17 +72,15 @@ def insert_user(object):
     results = sf.query_all(query)
     try:
         object_id = results['records'][0]['Id']
-        print 'heres the stuff'
-        print object_id
     except:
         object_id = None
 
     if object_id is not None:
-        print sf.Contact.update(object_id, object)
-        print 'heres the stuff again'
-        print object_id
+        add_count()
+        sf.Contact.update(object_id, object)
         return {'id': object_id}
     else:
+        add_count()
         return sf.Contact.create(object)
 
 
@@ -79,9 +110,11 @@ def insert_campaign(object):
         object_id = None
 
     if object_id is not None:
+        add_count()
         sf.Campaign.update(object_id, object)
         return {'id': object_id}
     else:
+        add_count()
         return sf.Campaign.create(object)
 
 
@@ -109,8 +142,10 @@ def upsert_contact_to_campaign(object):
         object = {
             'Campaign_Language__c': object['Campaign_Language__c']
         }
+        add_count()
         return sf.CampaignMember.update(object_id, object)
     else:
+        add_count()
         return sf.CampaignMember.create(object)
 
 
@@ -131,7 +166,9 @@ def upsert_campaign(object):
         object_id = None
 
     if object_id is not None:
+        add_count()
         sf.Campaign.update(object_id, object)
         return {'id': object_id}
     else:
+        add_count()
         return sf.Campaign.create(object)

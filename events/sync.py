@@ -3,7 +3,6 @@ from models import *
 from annoying.functions import get_object_or_None
 from django.utils import timezone
 from django.conf import settings
-import unicodedata
 
 
 def fetch_save_event(event):
@@ -167,20 +166,14 @@ def record_campaign_members(event_nb_id):
 
 def compare_nb_dj_member_list(nb_list):
     for nb_member in nb_list:
-        print nb_member['event_id']
-        print nb_member['person_id']
         campaign = Campaign.objects.get(nb_id=nb_member['event_id'])
 
         if not CampaignMember.objects.filter(member_nb_id=nb_member['person_id'], campaign_id=campaign).exists():
-            print 'here'
-            print nb_member['event_id']
             user_details = nb_backends.fetch_user(nb_member['person_id']).json()
             event_dj = get_object_or_None(Campaign, nb_id=nb_member['event_id'])
 
             user_language = determine_user_language(user_details)
             country_code = determine_country_code(user_details)
-            print user_language
-            print country_code
             try:
                 sf_contact_id = sf_backends.insert_user({
                     'FirstName': user_details['person']['first_name'],
@@ -194,11 +187,8 @@ def compare_nb_dj_member_list(nb_list):
                     'Signup_Source_URL__c': 'makerparty.community',
                 })
             except:
-                print 'error'
-                print settings.ADVOCACY_RECORD_TYPE_ID
                 continue
-            print 'still here'
-            print sf_contact_id['id']
+
             obj = CampaignMember(
                 campaign_id=event_dj,
                 member_sf_id=sf_contact_id['id'],
@@ -206,8 +196,8 @@ def compare_nb_dj_member_list(nb_list):
                 attended_before=False,
                 campaign_language=user_language
             )
-            print obj
             obj.save()
+
             try:
                 sf_backends.upsert_contact_to_campaign({
                     'ContactId': sf_contact_id['id'],

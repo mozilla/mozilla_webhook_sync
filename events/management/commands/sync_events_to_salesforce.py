@@ -1,11 +1,15 @@
 from django.core.management.base import BaseCommand
 from events.sync import *
 from django.conf import settings
+from apis.sf_backends import check_count
 
 
 class Command(BaseCommand):
-
     def handle(self, *args, **options):
+        print("Check API upper limit")
+        if not check_count():
+            return
+
         print("Begin syncing")
 
         event_list = nb_backends.fetch_events().json()
