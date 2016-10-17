@@ -16,11 +16,11 @@ class Command(BaseCommand):
 
         # fetch un-synced contacts from database
         contact_list = ContactSync.objects.filter(synced=False).order_by('-created_at')
-
+        print contact_list
         # sync them to salesforce
         for contact in contact_list:
             print("----------")
-            print(contact)
+            print contact
             person = contact.contact['payload']['person']
             print(person['email'])
             contact_obj = {
