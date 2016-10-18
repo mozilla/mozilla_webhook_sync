@@ -19,15 +19,15 @@ class Command(BaseCommand):
         # sync them to salesforce
         for contact in contact_list:
             print("----------")
-            person = eval(contact.contact)
+            person_obj = eval(contact.contact)
             person = person['payload']['person']
             print(person['email'])
             contact_obj = {
                 'FirstName': person['first_name'],
                 'LastName': person['last_name'],
                 'Email': person['email'],
-                'MailingCountryCode': determine_country_code(contact['payload']),
-                'Email_Language__c': determine_user_language(contact['payload']),
+                'MailingCountryCode': determine_country_code(person_obj['payload']),
+                'Email_Language__c': determine_user_language(person_obj['payload']),
                 'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID,  # advocacy record type
                 'Signup_Source_URL__c': 'changecopyright.org',
             }
