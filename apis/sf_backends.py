@@ -3,22 +3,24 @@ from apis.models import Counter
 import requests
 from django.conf import settings
 import re
+from django.utils import timezone
 
 
 def add_count():
     try:
-        counter = Counter.objects.latest('last_updated')
+        counter = Counter.objects.latest('counter_date')
     except Counter.DoesNotExist:
         counter = Counter()
         counter.save()
 
     counter.counter += 1
+    counter.last_updated = timezone.now
     counter.save()
 
 
 def check_count():
     try:
-        counter = Counter.objects.latest('last_updated')
+        counter = Counter.objects.latest('counter_date')
     except Counter.DoesNotExist:
         counter = Counter()
         counter.save()
