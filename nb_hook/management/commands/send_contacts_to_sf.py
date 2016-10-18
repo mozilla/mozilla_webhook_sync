@@ -23,8 +23,8 @@ class Command(BaseCommand):
             person = person_obj['payload']['person']
             print(person['email'])
             contact_obj = {
-                'FirstName': person['first_name'],
-                'LastName': person['last_name'],
+                'FirstName': person['first_name'][:40],
+                'LastName': person['last_name'][:80],
                 'Email': person['email'],
                 'MailingCountryCode': determine_country_code(person_obj['payload']),
                 'Email_Language__c': determine_user_language(person_obj['payload']),

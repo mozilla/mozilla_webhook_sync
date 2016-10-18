@@ -32,8 +32,8 @@ def fetch_save_event(event):
         # create or update creator user fb_id from Salesforce via email from event obj
         try:
             creator_sf_id = sf_backends.insert_user({
-                'FirstName': creator['person']['first_name'],
-                'LastName': creator['person']['last_name'],
+                'FirstName': creator['person']['first_name'][:40],
+                'LastName': creator['person']['last_name'][:80],
                 'Email': creator['person']['email'],
                 'MailingCountryCode': country_code,
                 'Email_Language__c': user_language,
@@ -47,7 +47,7 @@ def fetch_save_event(event):
 
         # insert campaign to SF and get the sf_campaign_id
         event_sf_obj = {
-            'Name': event['name'],
+            'Name': event['name'][:80],
             'Type': 'Event',
             'Location__c': insert_address(event),
             'ParentId': settings.EVENT_PARENT_ID,
@@ -61,7 +61,7 @@ def fetch_save_event(event):
 
             # save obj to DJ Campaign table
             event_dj_obj = Campaign(
-                name=event['name'],
+                name=event['name'][:80],
                 start_time=event['start_time'],
                 nb_id=event['id'],
                 sf_id=sf_campaign_id['id'],
@@ -95,7 +95,7 @@ def fetch_save_event(event):
         event_nb = nb_backends.fetch_event(event_dj.nb_id).json()
         if event_nb != event:
             event_sf_obj = {
-                'Name': event['name'],
+                'Name': event['name'][:80],
                 'Type': 'Event',
                 'Location__c': insert_address(event),
                 'ParentId': settings.EVENT_PARENT_ID,
@@ -114,7 +114,7 @@ def fetch_save_event(event):
             })
 
             event_dj_obj = {
-                'name': event_nb['event']['name'],
+                'name': event_nb['event']['name'][:80],
                 'start_time': event_nb['event']['start_time'],
                 'type': event_dj.type,
                 'creator_sf_id': event_dj.creator_sf_id,
@@ -277,6 +277,7 @@ def insert_address(obj):
         pass
     address = address.strip()
     address = address.strip(',')
+    address = address[:80]
     return address
 
 
