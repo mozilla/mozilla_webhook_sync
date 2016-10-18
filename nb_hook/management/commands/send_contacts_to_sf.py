@@ -15,7 +15,7 @@ class Command(BaseCommand):
         print("Begin sending contacts to Salesforce")
 
         # fetch un-synced contacts from database
-        contact_list = ContactSync.objects.filter(synced=False).order_by('created_at')[:10]
+        contact_list = ContactSync.objects.filter(synced=False, id__lte=58512).order_by('created_at')[:1500]
         # sync them to salesforce
         for contact in contact_list:
             if not check_count():
