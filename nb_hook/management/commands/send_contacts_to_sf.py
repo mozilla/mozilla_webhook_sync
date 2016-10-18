@@ -4,7 +4,7 @@ from apis import sf_backends
 from apis.sf_backends import check_count
 from nb_hook.models import *
 from events.sync import determine_country_code, determine_user_language
-
+import json
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -23,7 +23,12 @@ class Command(BaseCommand):
                 return
 
             print("----------")
-            person_obj = eval(contact.contact)
+
+            try:
+                person_obj = eval(contact.contact)
+            except:
+                person_obj = json.loads(contact.contact)
+
             person = person_obj['payload']['person']
             print(person['email'])
             try:
