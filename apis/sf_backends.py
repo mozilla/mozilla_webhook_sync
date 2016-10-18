@@ -1,15 +1,55 @@
 from simple_salesforce import Salesforce
+from apis.models import Counter
 import requests
 from django.conf import settings
 import re
+from django.utils import timezone
+
+
+def add_count():
+    try:
+        counter = Counter.objects.latest('counter_date')
+    except Counter.DoesNotExist:
+        counter = Counter()
+        counter.save()
+
+    counter.counter += 1
+    counter.last_updated = timezone.now()
+    counter.save()
+
+
+def check_count():
+    try:
+        counter = Counter.objects.latest('counter_date')
+    except Counter.DoesNotExist:
+        counter = Counter()
+        counter.save()
+
+    if counter.counter < int(settings.SF_API_COUNTER_LIMIT):
+        return True
+    else:
+        return False
+
+
+def reset_counter():
+    new_counter = Counter()
+    new_counter.save()
 
 
 def get_sf_session():
+    check_count()
     session = requests.Session()
+
+    if settings.SF_SANDBOX == 'true':
+        sandbox = True
+    else:
+        sandbox = False
+
+    add_count()
     return Salesforce(username=settings.SF_USERNAME,
                       password=settings.SF_PASSWORD,
                       security_token=settings.SF_TOKEN,
-                      sandbox=False,
+                      sandbox=sandbox,
                       session=session,
                       )
 
@@ -37,9 +77,11 @@ def insert_user(object):
         object_id = None
 
     if object_id is not None:
+        add_count()
         sf.Contact.update(object_id, object)
         return {'id': object_id}
     else:
+        add_count()
         return sf.Contact.create(object)
 
 
@@ -55,13 +97,13 @@ def fetch_campaign(object_id):
 
 def fetch_campaign_by_name(name):
     sf = get_sf_session()
-    query = "select id from Campaign where Name = '{0}'".format(re.escape(name))
+    query = "select id from Campaign where Name = '{0}'".format(re.sub(r"([\'])", r'\\\1', name))
     return sf.query_all(query)
 
 
 def insert_campaign(object):
     sf = get_sf_session()
-    query = "select Id from Campaign where Name = '{0}'".format(re.escape(object['Name']))
+    query = "select id from Campaign where Nationbuilder_id__c = '{0}'".format(object['Nationbuilder_id__c'])
     results = sf.query_all(query)
     try:
         object_id = results['records'][0]['Id']
@@ -69,10 +111,20 @@ def insert_campaign(object):
         object_id = None
 
     if object_id is not None:
+        add_count()
         sf.Campaign.update(object_id, object)
         return {'id': object_id}
     else:
+        add_count()
         return sf.Campaign.create(object)
+
+
+def delete_campaign(object_id):
+    sf = get_sf_session()
+    try:
+        return sf.Campaign.delete(object_id)
+    except:
+        return False
 
 
 def upsert_contact_to_campaign(object):
@@ -80,7 +132,7 @@ def upsert_contact_to_campaign(object):
 
     # search for existing user
     query = "select id from CampaignMember where ContactId = '{0}' " \
-            "and CampaignId = '{1}'".format(object['ContactId'], re.escape(object['CampaignId']))
+            "and CampaignId = '{1}'".format(object['ContactId'], re.sub(r"([\'])", r'\\\1', object['CampaignId']))
     results = sf.query_all(query)
     try:
         object_id = results['records'][0]['Id']
@@ -91,8 +143,10 @@ def upsert_contact_to_campaign(object):
         object = {
             'Campaign_Language__c': object['Campaign_Language__c']
         }
+        add_count()
         return sf.CampaignMember.update(object_id, object)
     else:
+        add_count()
         return sf.CampaignMember.create(object)
 
 
@@ -104,7 +158,7 @@ def fetch_campaign_member(object_id):
 def upsert_campaign(object):
     sf = get_sf_session()
 
-    query = "select id from Campaign where Name = '{0'".format(re.escape(object['Name']))
+    query = "select id from Campaign where Name = '{0}'".format(re.sub(r"([\'])", r'\\\1', object['Name']))
     results = sf.query_all(query)
 
     try:
@@ -113,7 +167,9 @@ def upsert_campaign(object):
         object_id = None
 
     if object_id is not None:
+        add_count()
         sf.Campaign.update(object_id, object)
         return {'id': object_id}
     else:
+        add_count()
         return sf.Campaign.create(object)
