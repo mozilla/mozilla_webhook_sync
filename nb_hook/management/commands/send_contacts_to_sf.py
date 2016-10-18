@@ -4,7 +4,7 @@ from apis import sf_backends
 from apis.sf_backends import check_count
 from nb_hook.models import *
 from events.sync import determine_country_code, determine_user_language
-import simplejson as json
+
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
