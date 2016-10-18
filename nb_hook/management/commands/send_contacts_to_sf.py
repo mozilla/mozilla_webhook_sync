@@ -4,7 +4,7 @@ from apis import sf_backends
 from apis.sf_backends import check_count
 from nb_hook.models import *
 from events.sync import determine_country_code, determine_user_language
-
+import simplejson as json
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -15,13 +15,12 @@ class Command(BaseCommand):
         print("Begin sending contacts to Salesforce")
 
         # fetch un-synced contacts from database
-        contact_list = ContactSync.objects.filter(synced=False).order_by('-created_at')
-        print contact_list
+        contact_list = ContactSync.objects.filter(synced=False).order_by('created_at')
         # sync them to salesforce
         for contact in contact_list:
             print("----------")
-            print contact.contact
-            person = contact.contact['payload']['person']
+            person = eval(contact.contact)
+            person = person['payload']['person']
             print(person['email'])
             contact_obj = {
                 'FirstName': person['first_name'],
