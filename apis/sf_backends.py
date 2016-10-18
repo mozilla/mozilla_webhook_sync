@@ -14,7 +14,7 @@ def add_count():
         counter.save()
 
     counter.counter += 1
-    counter.last_updated = timezone.now
+    counter.last_updated = timezone.now()
     counter.save()
 
 
