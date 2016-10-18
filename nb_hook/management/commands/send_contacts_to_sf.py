@@ -20,7 +20,7 @@ class Command(BaseCommand):
         for contact in contact_list:
             print("----------")
             person_obj = eval(contact.contact)
-            person = person['payload']['person']
+            person = person_obj['payload']['person']
             print(person['email'])
             contact_obj = {
                 'FirstName': person['first_name'],
