@@ -37,7 +37,7 @@ class Command(BaseCommand):
 
             sf_backends.upsert_contact_to_campaign({
                 'ContactId': sf_contact_id['id'],
-                'CampaignId': settings.SF_CAMPAIGN_ID,
+                'CampaignId': settings.SF_PETITION_CAMPAIGN_ID,
                 'Campaign_Language__c': person['user_language'],
                 'Campaign_Email_Opt_In__c': person['email_opt_in'],
             })
