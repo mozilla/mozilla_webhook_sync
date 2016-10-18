@@ -26,22 +26,22 @@ class Command(BaseCommand):
             person_obj = eval(contact.contact)
             person = person_obj['payload']['person']
             print(person['email'])
-            # try:
-            contact_obj = {
-                'FirstName': person['first_name'][:40],
-                'LastName': person['last_name'][:80],
-                'Email': person['email'],
-                'MailingCountryCode': determine_country_code(person_obj['payload']),
-                'Email_Language__c': determine_user_language(person_obj['payload']),
-                'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID,  # advocacy record type
-                'Signup_Source_URL__c': 'changecopyright.org',
-            }
-            sf_contact_id = sf_backends.insert_user(contact_obj)
-            print("sf_contact_id")
-            print(sf_contact_id['id'])
-            # except:
-            #     print("Contact is having error")
-            #     continue
+            try:
+                contact_obj = {
+                    'FirstName': person['first_name'][:40],
+                    'LastName': person['last_name'][:80],
+                    'Email': person['email'],
+                    'MailingCountryCode': determine_country_code(person_obj['payload']),
+                    'Email_Language__c': determine_user_language(person_obj['payload']),
+                    'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID,  # advocacy record type
+                    'Signup_Source_URL__c': 'changecopyright.org',
+                }
+                sf_contact_id = sf_backends.insert_user(contact_obj)
+                print("sf_contact_id")
+                print(sf_contact_id['id'])
+            except:
+                print("Contact is having error")
+                continue
 
             try:
                 sf_backends.upsert_contact_to_campaign({
