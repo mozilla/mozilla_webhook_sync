@@ -83,9 +83,9 @@ def save_user(content, post_type):
     # add this to prevent NB sending duplicated user_created with user_language as null
     if not content['payload']['person']['user_language']:
         return HttpResponse('not saved, no user_language')
-
-    if 'Copyright Campaign' not in content['payload']['person']['tags']:
-        return HttpResponse('Not Copyright Petition')
+    #
+    # if 'Copyright Campaign' not in content['payload']['person']['tags']:
+    #     return HttpResponse('Not Copyright Petition')
 
     try:
         matching_contacts = models.ContactSync.objects.filter(email=content['payload']['person']['email']).update(contact=content, synced=False)
