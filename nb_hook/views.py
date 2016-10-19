@@ -84,6 +84,9 @@ def save_user(content, post_type):
     if not content['payload']['person']['user_language']:
         return HttpResponse('not saved, no user_language')
 
+    if 'Copyright Campaign' not in content['payload']['person']['tags']:
+        return HttpResponse('Not Copyright Petition')
+
     try:
         matching_contacts = models.ContactSync.objects.filter(email=content['payload']['person']['email']).update(contact=content, synced=False)
     except models.ContactSync.DoesNotExist:
