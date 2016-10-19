@@ -25,7 +25,10 @@ def check_count():
         counter = Counter()
         counter.save()
 
+
     if counter.counter < int(settings.SF_API_COUNTER_LIMIT):
+        if counter.counter == int(settings.SF_API_COUNTER_LIMIT) * 0.67:
+            pass
         return True
     else:
         return False
@@ -45,7 +48,6 @@ def get_sf_session():
     else:
         sandbox = False
 
-    add_count()
     return Salesforce(username=settings.SF_USERNAME,
                       password=settings.SF_PASSWORD,
                       security_token=settings.SF_TOKEN,
@@ -56,12 +58,14 @@ def get_sf_session():
 
 def fetch_user(object_id):
     sf = get_sf_session()
+    add_count()
     return sf.Contact.get(object_id)
 
 
 def fetch_user_by_email(email):
     sf = get_sf_session()
     query = "select id from Contact where Email = '{0}'".format(email)
+    add_count()
     return sf.query_all(query)
 
 
@@ -70,6 +74,7 @@ def insert_user(object):
 
     # search for existing user
     query = "select Id from Contact where Email = '{0}'".format(object['Email'])
+    add_count()
     results = sf.query_all(query)
     try:
         object_id = results['records'][0]['Id']
@@ -87,23 +92,27 @@ def insert_user(object):
 
 def update_user(object_id, object):
     sf = get_sf_session()
+    add_count()
     return sf.Contact.update(object_id, object)
 
 
 def fetch_campaign(object_id):
     sf = get_sf_session()
+    add_count()
     return sf.Campaign.get(object_id)
 
 
 def fetch_campaign_by_name(name):
     sf = get_sf_session()
     query = "select id from Campaign where Name = '{0}'".format(re.sub(r"([\'])", r'\\\1', name))
+    add_count()
     return sf.query_all(query)
 
 
 def insert_campaign(object):
     sf = get_sf_session()
     query = "select id from Campaign where Nationbuilder_id__c = '{0}'".format(object['Nationbuilder_id__c'])
+    add_count()
     results = sf.query_all(query)
     try:
         object_id = results['records'][0]['Id']
@@ -121,6 +130,7 @@ def insert_campaign(object):
 
 def delete_campaign(object_id):
     sf = get_sf_session()
+    add_count()
     try:
         return sf.Campaign.delete(object_id)
     except:
@@ -133,6 +143,7 @@ def upsert_contact_to_campaign(object):
     # search for existing user
     query = "select id from CampaignMember where ContactId = '{0}' " \
             "and CampaignId = '{1}'".format(object['ContactId'], re.sub(r"([\'])", r'\\\1', object['CampaignId']))
+    add_count()
     results = sf.query_all(query)
     try:
         object_id = results['records'][0]['Id']
@@ -152,6 +163,7 @@ def upsert_contact_to_campaign(object):
 
 def fetch_campaign_member(object_id):
     sf = get_sf_session()
+    add_count()
     return sf.CampaignMember.get(object_id)
 
 
@@ -159,6 +171,7 @@ def upsert_campaign(object):
     sf = get_sf_session()
 
     query = "select id from Campaign where Name = '{0}'".format(re.sub(r"([\'])", r'\\\1', object['Name']))
+    add_count()
     results = sf.query_all(query)
 
     try:
