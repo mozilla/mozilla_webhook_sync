@@ -14,7 +14,8 @@ Set up local settings file
 
 Clone settings/local-dist and rename it to settings/local.py
 
-**Virtual Env**
+Virtual Env
+-----------
 
 We recommend using Virtualenvs for settings up the dev enviornment. You will have to download "Virtual Env" (Venv) to set up an isolated environment for the applicaiton. You can download and install that by running::
 
@@ -134,6 +135,9 @@ For the command script, please look up **nb_book/management/commands/send_contac
 Fields Synced to SalesForce
 ---------------------------
 
+Fields
+------
+
 Currently, these are the user fields from Nationbuilder that are pushed to the webhook, and synced into Salesforce via Force API
 
 *Contact*::
@@ -162,7 +166,8 @@ Once a user is created / updated in Salesforce, Salesforce will send a signal ba
 It will then update the "synced" column in ContactSync from *False* to *True*
 
 
-**Database Logs**
+Database Logs
+-------------
 
 For debugging purpose, we have a database table for storing all records. It includes all records from Nationbuilder in JSON format, email, sync type (create or update), and sync status (boolean)
 
