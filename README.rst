@@ -135,9 +135,6 @@ For the command script, please look up **nb_book/management/commands/send_contac
 Fields Synced to SalesForce
 ---------------------------
 
-Fields
-------
-
 Currently, these are the user fields from Nationbuilder that are pushed to the webhook, and synced into Salesforce via Force API
 
 *Contact*::
