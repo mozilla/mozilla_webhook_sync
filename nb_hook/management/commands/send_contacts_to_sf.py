@@ -40,6 +40,8 @@ class Command(BaseCommand):
                     'Email_Language__c': determine_user_language(person_obj['payload']),
                     'RecordTypeId': settings.ADVOCACY_RECORD_TYPE_ID,  # advocacy record type
                     'Signup_Source_URL__c': 'changecopyright.org',
+                    'Subscriber__c': person['email_opt_in'],
+                    'Sub_Mozilla_Foundation__c': person['email_opt_in'],
                 }
                 sf_contact_id = sf_backends.insert_user(contact_obj)
                 print("sf_contact_id")
