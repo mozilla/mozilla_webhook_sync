@@ -69,7 +69,8 @@ It is located in::
 Nationbuilder Petition Signup Module
 ====================================
 
-**Webhooks**
+Webhooks
+--------
 
 This whole module is behind the scene, living in a Heroku instance. It is not meant to be seen by the public, and it is running automatically to sync the sign up information from Nationbuilder to Salesforce.
 
@@ -89,7 +90,8 @@ The webhook app is "**nb_hook**", and the main file is **views.py**. For receivi
 The view file's (**views.py**) purpose is to save the data in the internal database, they are saved into a Heroku database, check out ContactSync Model in models.py file.
 
 
-**Heroku Scheduler**
+Heroku Scheduler
+----------------
 
 The data saved in ContactSync table are not sync'ed into Salesforce yet. The sync is processed via a Heroku Scheduler command. The command for that is::
 
@@ -129,7 +131,8 @@ You should notice that there are three add_count() function called in the insert
 For the command script, please look up **nb_book/management/commands/send_contacts_to_sf.py**
 
 
-**Fields Synced to SalesForce**
+Fields Synced to SalesForce
+---------------------------
 
 Currently, these are the user fields from Nationbuilder that are pushed to the webhook, and synced into Salesforce via Force API
 
@@ -159,7 +162,7 @@ Once a user is created / updated in Salesforce, Salesforce will send a signal ba
 It will then update the "synced" column in ContactSync from *False* to *True*
 
 
-**Database Log**
+**Database Logs**
 
 For debugging purpose, we have a database table for storing all records. It includes all records from Nationbuilder in JSON format, email, sync type (create or update), and sync status (boolean)
 
@@ -170,7 +173,8 @@ It is in the "Log" model and the records are saved via "save_user" method in **n
 Nationbuilder Event Sync Module
 ===============================
 
-**Custom Django Command**
+Custom Django Command
+---------------------
 
 Maker Event is using a different method to sync the data into Salesforce, as Nationbuilder does not provide webhook support for event creation or update. In order to sync we will have to do a pull from Nationbuilder API and send it to Salesforce manually. We are using a Heroku scheduler to run the sync command hourly.
 
@@ -181,11 +185,14 @@ The Maker Party app is "events", and the main sync command is in management/comm
 Like the Contact sync above, each SalesForce api call will add toward the daily count limit.
 
 
-**Nationbuilder API -> sync module -> Salesforce API**
+Nationbuilder API -> sync module -> Salesforce API
+--------------------------------------------------
 
 The sync module will send request to Nationbuilder to get a full list of events, save it in the sync module for fast referencing, and send the events to Salesforce. If an event is identical from the previous sync, or has been sync'ed in less than 60 minutes, the sync module will skip it. Currently, the sync occurs hourly.
 
-**Fields synced to SalesForce**
+Fields synced to SalesForce
+---------------------------
+
 Here are the fields that are sync'ed into Salesforce:
 
 *Campaign*::
