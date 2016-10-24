@@ -56,7 +56,7 @@ Heroku Scheduler is a plugin for running cron jobs, you can set the settings via
 
 *Overview* -> *Installed add-ons* -> *Heroku Scheduler*
 
-.. image:: https://github.com/mozilla/mozilla_webhook_sync/blob/master/readme/heroku_scheduler.png.png?raw=true
+.. image:: https://github.com/mozilla/mozilla_webhook_sync/blob/master/readme/heroku_scheduler.png?raw=true
 
 
 **Django Settings files for Heroku**
