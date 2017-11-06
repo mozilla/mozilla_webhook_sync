@@ -49,8 +49,6 @@ Many of the system settings are set via Heroku, you can get there via:
 
 *settings* -> *Config Variables*
 
-.. image:: https://github.com/mozilla/mozilla_webhook_sync/blob/master/readme/heroku_config_vars.png?raw=true
-
 **Scheduler**
 
 Heroku Scheduler is a plugin for running cron jobs, you can set the settings via:
